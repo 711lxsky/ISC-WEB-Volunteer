@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3808fb8a-b624-4653-89d0-cf25923ceeb4" name="变更" comment="上传基本的Java模块">
-      <change beforePath="$PROJECT_DIR$/多多鼓励.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/需求整理.md" beforeDir="false" />
-    </list>
+    <list default="true" id="3808fb8a-b624-4653-89d0-cf25923ceeb4" name="变更" comment="上传基本的Java模块" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -74,7 +71,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680701088876</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="上传基本的Java模块">
+      <created>1680701662390</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1680701662390</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
