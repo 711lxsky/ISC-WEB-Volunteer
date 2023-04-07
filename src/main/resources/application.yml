@@ -1,0 +1,4 @@
+server:
+  port: 8090
+  servler:
+    path: /hello
