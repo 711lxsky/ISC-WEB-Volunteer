@@ -28,8 +28,9 @@ import java.util.concurrent.TimeUnit;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
     @Autowired
+    // 功能再复杂的话可以抽象出redis工具类
     private RedisTemplate redisTemplate;
-
+ // user:7ce0ec69-6492-4f0a-8adc-ee07e534ee3d
     @Override
     public Map<String, Object> login(User user) {
         // 根据用户名和密码进行查询，结果不为空则生成token，并将用户信息存入redis
@@ -43,6 +44,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
         // 存入redis
         loginUser.setPassword(null);
+        // 注意记录有效时间timeout
         redisTemplate.opsForValue().set(key,loginUser,30, TimeUnit.MINUTES);
 
         // 返回数据
@@ -71,5 +73,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             return data;
         }
         return null;
+    }
+
+    @Override
+    public boolean logout(String token) {
+        if(redisTemplate.delete(token)){
+            return true;
+        }
+        return false;
     }
 }

@@ -26,9 +26,9 @@ public class LoginController {
 
     @GetMapping("/info")
     public Result<Map<String,Object>> getUerInfo(@RequestParam("token") String token){
-        // 根据token获取用户信息，redis
+        // 根据token获取用户信息，存入了redis的那串数据
         Map<String,Object> data = userService.getUserInfo(token);
-        if(data != null){
+        if(! data.isEmpty()){
             return Result.success(data);
         }
         return Result.fail(20003,"登录信息无效，请重新登录");

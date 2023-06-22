@@ -37,7 +37,7 @@ public class MyRedisConfig {
         Jackson2JsonRedisSerializer serializer = new Jackson2JsonRedisSerializer<Object>(Object.class);
         redisTemplate.setValueSerializer(serializer);
 
-
+        // 这里貌似是从哪儿copy的，应该是起到jason格式反序列化的作用
         ObjectMapper om = new ObjectMapper();
         om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         om.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
