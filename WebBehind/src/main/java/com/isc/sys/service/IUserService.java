@@ -1,5 +1,6 @@
 package com.isc.sys.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.isc.sys.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,4 +24,7 @@ public interface IUserService extends IService<User> {
     Map<String, Object> getUserInfo(String token);
 
     boolean logout(String token);
+
+
+    Map<String, Object> getUserList(LambdaQueryWrapper<User> wrapper , Long pageNum, Long pageSize);
 }

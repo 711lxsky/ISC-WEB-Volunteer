@@ -2,6 +2,8 @@ package com.isc.sys.service.impl;
 
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.isc.sys.entity.User;
 import com.isc.sys.mapper.UserMapper;
 import com.isc.sys.service.IUserService;
@@ -81,5 +83,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Map<String, Object> getUserList(LambdaQueryWrapper<User> wrapper, Long pageNum, Long pageSize) {
+        Page<User> page = new Page<>(pageNum,pageSize);
+        this.page(page,wrapper);
+        Map<String,Object> data = new HashMap<>();
+        data.put("total",page.getTotal());
+        data.put("rows",page.getRecords());
+
+        return data;
     }
 }
