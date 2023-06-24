@@ -10,6 +10,7 @@ import com.isc.sys.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -32,8 +33,35 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Autowired
     // 功能再复杂的话可以抽象出redis工具类
     private RedisTemplate redisTemplate;
- // user:7ce0ec69-6492-4f0a-8adc-ee07e534ee3d
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
+    public Map<String, Object> login(User user) {
+        // 根据用户名查询
+        LambdaQueryWrapper<User>  wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getUsername,user.getUsername());
+        User loginUser = this.baseMapper.selectOne(wrapper);
+        // 结果不为空，且密码和传入密码匹配，则生成token，并将用户信息存入redis
+        if(loginUser != null && passwordEncoder.matches(user.getPassword(),loginUser.getPassword())){
+            // 生成token，暂时用UUID，最终方案应是jwt
+            String key = "user:" +  UUID.randomUUID();
+
+            // 存入redis
+            loginUser.setPassword(null);
+            // 注意记录有效时间timeout
+            redisTemplate.opsForValue().set(key,loginUser,30, TimeUnit.MINUTES);
+
+            // 返回数据
+            Map<String,Object> data = new HashMap<>();
+            data.put("token",key);
+            return data;
+        }
+
+        return null;
+    }
+   /* @Override
     public Map<String, Object> login(User user) {
         // 根据用户名和密码进行查询，结果不为空则生成token，并将用户信息存入redis
          LambdaQueryWrapper<User>  wrapper = new LambdaQueryWrapper<>();
@@ -56,7 +84,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
 
         return null;
-    }
+    }*/
 
     @Override
     public Map<String, Object> getUserInfo(String token) {
@@ -87,6 +115,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public Map<String, Object> getUserList(LambdaQueryWrapper<User> wrapper, Long pageNum, Long pageSize) {
+        wrapper.orderByDesc(User::getId);
         Page<User> page = new Page<>(pageNum,pageSize);
         this.page(page,wrapper);
         Map<String,Object> data = new HashMap<>();

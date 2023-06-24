@@ -24,8 +24,8 @@
         </el-col>
         <el-col :span="4" align="right">
           <el-button
-            @click="openEditUI"
-            @type="primary"
+            @click="openEditUI(null)"
+            type="primary"
             icon="el-icon-plus"
             circle
           ></el-button>
@@ -52,8 +52,34 @@
         </el-table-column>
         <el-table-column prop="phone" label="电话" width="180">
         </el-table-column>
+        <el-table-column prop="status" label="用户状态" width="180">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.status == 1">正常</el-tag>
+            <el-tag v-else-if="scope.row.status == 0" type="danger"
+              >没空</el-tag
+            >
+            <el-tag v-else type="info">未知</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column prop="email" label="电子邮件"> </el-table-column>
-        <el-table-column label="操作" width="180"> </el-table-column>
+        <el-table-column label="操作" width="180">
+          <template slot-scope="scope">
+            <el-button
+              @click="openEditUI(scope.row.id)"
+              type="primary"
+              icon="el-icon-edit"
+              size="mini"
+              circle
+            ></el-button>
+            <el-button
+              @click="deleteUser(scope.row)"
+              type="danger"
+              icon="el-icon-delete"
+              size="mini"
+              circle
+            ></el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </el-card>
 
@@ -70,15 +96,36 @@
     </el-pagination>
 
     <!-- 用户信息编辑对话框-->
-    <el-dialog :title="title" :visible.sync="dialogFormVisible">
-      <el-form :model="userForm">
-        <el-form-item label="用户名" :label-width="formLabelWidth">
+    <el-dialog
+      @close="clearForm"
+      :title="title"
+      :visible.sync="dialogFormVisible"
+    >
+      <el-form :model="userForm" ref="userFormRef" :rules="rules">
+        <el-form-item
+          label="用户名"
+          prop="username"
+          :label-width="formLabelWidth"
+        >
           <el-input v-model="userForm.username" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="登录密码" :label-width="formLabelWidth">
-          <el-input type="password" v-model="userForm.password" autocomplete="off"></el-input>
+        <el-form-item
+          v-if="userForm.id == null || userForm.id == undefined"
+          label="登录密码"
+          prop="password"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            type="password"
+            v-model="userForm.password"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="联系电话" :label-width="formLabelWidth">
+        <el-form-item
+          label="联系电话"
+          prop="phone"
+          :label-width="formLabelWidth"
+        >
           <el-input v-model="userForm.phone" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="用户状态" :label-width="formLabelWidth">
@@ -89,15 +136,21 @@
           >
           </el-switch>
         </el-form-item>
-        <el-form-item label="电子邮件" :label-width="formLabelWidth">
-          <el-input v-model="userForm.email" autocomplete="off"></el-input>
+        <el-form-item
+          label="电子邮件"
+          prop="email"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            type="email"
+            v-model="userForm.email"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="saveUser">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -118,11 +171,96 @@ export default {
         pageSize: 10,
       },
       userlist: [],
+      rules: {
+        username: [
+          { required: true, message: "请输入用户名", trigger: "blur" },
+          {
+            min: 3,
+            max: 24,
+            message: "长度在 3 到 24 个字符",
+            trigger: "blur",
+          },
+        ],
+        password: [
+          { required: true, message: "请输入登录初始密码", trigger: "blur" },
+          {
+            min: 6,
+            max: 16,
+            message: "长度在 6 到 16 个字符",
+            trigger: "blur",
+          },
+        ],
+        email: [{ required: true, message: "请输入电子邮件", trigger: "blur" }],
+        phone: [
+          { required: true, message: "请输入联系电话", trigger: "blur" },
+          {
+            min: 7,
+            max: 11,
+            message: "长度在 7 到 11 个字符",
+            trigger: "blur",
+          },
+        ],
+      },
     };
   },
   methods: {
-    openEditUI() {
-      this.title = "新增用户";
+    deleteUser(user) {
+      this.$confirm(`您确认删除用户${user.username}吗？`, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          userApi.deleteUserById(user.id).then((response) => {
+            this.$message({
+              type: "success",
+              message: response.message
+            });
+            this.getUserList();
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
+    saveUser() {
+      // 触发表单验证，提交请求给后台
+      this.$refs.userFormRef.validate((valid) => {
+        if (valid) {
+          userApi.saveUser(this.userForm).then((response) => {
+            // 成功提示
+            this.$message({
+              message: response.message,
+              type: "success",
+            });
+            // 关闭对话框
+            this.dialogFormVisible = false;
+            // 刷新数据、表格
+            this.getUserList();
+          });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    clearForm() {
+      this.userForm = {};
+      this.$refs.userFormRef.clearValidate();
+    },
+    openEditUI(id) {
+      if (id == null) {
+        this.title = "新增用户";
+      } else {
+        this.title = "修改用户";
+        // 根据id查询用户数据
+        userApi.getUserById(id).then((response) => {
+          this.userForm = response.data;
+        });
+      }
       this.dialogFormVisible = true;
     },
     handleSizeChange(pageSize) {
