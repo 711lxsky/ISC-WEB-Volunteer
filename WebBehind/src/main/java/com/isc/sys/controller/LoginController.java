@@ -3,11 +3,14 @@ package com.isc.sys.controller;
 import com.isc.common.viewObj.Result;
 import com.isc.sys.entity.User;
 import com.isc.sys.service.IUserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+@Api(tags = {"登陆接口列表"})
 @RestController
 @RequestMapping("/user")
 public class LoginController {
@@ -15,6 +18,7 @@ public class LoginController {
     @Autowired
     private IUserService userService;
 
+    @ApiOperation("用户登录接口")
     @PostMapping("/login")
     public Result<Map<String, Object>> login(@RequestBody User user) {
         Map<String,Object>  data =  userService.login(user);

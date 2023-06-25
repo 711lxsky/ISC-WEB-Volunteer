@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.isc.common.utils.JwtUtil;
 import com.isc.sys.entity.User;
 import com.isc.sys.mapper.UserMapper;
 import com.isc.sys.service.IUserService;
@@ -37,6 +38,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @Override
     public Map<String, Object> login(User user) {
         // 根据用户名查询
@@ -46,14 +50,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         // 结果不为空，且密码和传入密码匹配，则生成token，并将用户信息存入redis
         if(loginUser != null && passwordEncoder.matches(user.getPassword(),loginUser.getPassword())){
             // 生成token，暂时用UUID，最终方案应是jwt
-            String key = "user:" +  UUID.randomUUID();
+           String key = "user:" +  UUID.randomUUID();
 
             // 存入redis
             loginUser.setPassword(null);
             // 注意记录有效时间timeout
             redisTemplate.opsForValue().set(key,loginUser,30, TimeUnit.MINUTES);
 
+            // 创建jwt
+           // String token = jwtUtil.createToken(loginUser);
             // 返回数据
+           // redisTemplate.opsForValue().set(token,loginUser,30,TimeUnit.MINUTES);
             Map<String,Object> data = new HashMap<>();
             data.put("token",key);
             return data;
@@ -89,7 +96,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public Map<String, Object> getUserInfo(String token) {
         // 获取用户信息
-        Object obj = redisTemplate.opsForValue().get(token);
+       /* User loginUser = null;
+        try {
+           loginUser = jwtUtil.parseToken(token,User.class);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }*/
+       Object obj = redisTemplate.opsForValue().get(token);
         if(obj != null){
             User loginUser = JSON.parseObject(JSON.toJSONString(obj),User.class);
             Map<String,Object> data = new HashMap<>();
