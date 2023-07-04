@@ -1,6 +1,6 @@
-package com/isc/backend.mvc.service;
+package com.isc.backend.mvc.service;
 
-import com/isc/backend.mvc.entity.Volunteer;
+import com.isc.backend.mvc.entity.Volunteer;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

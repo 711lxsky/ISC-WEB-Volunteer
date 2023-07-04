@@ -1,10 +1,8 @@
-package com/isc/backend.mvc.entity;
+package com.isc.backend.mvc.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
@@ -14,7 +12,6 @@ import io.swagger.annotations.ApiModelProperty;
  * @author 711lxsky
  * @since 2023-07-04
  */
-@ApiModel(value = "Regulator对象", description = "")
 public class Regulator implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -32,8 +29,10 @@ public class Regulator implements Serializable {
 
     private String avatar;
 
-    @ApiModelProperty("管理等级")
-    private Integer class;
+    /**
+     * 管理等级
+     */
+    private Integer rate;
 
     private Integer deleted;
 
@@ -85,12 +84,12 @@ public class Regulator implements Serializable {
         this.avatar = avatar;
     }
 
-    public Integer getClass() {
-        return class;
+    public Integer getRate() {
+        return rate;
     }
 
-    public void setClass(Integer class) {
-        this.class = class;
+    public void setRate(Integer rate) {
+        this.rate = rate;
     }
 
     public Integer getDeleted() {
@@ -110,7 +109,7 @@ public class Regulator implements Serializable {
             ", phone = " + phone +
             ", email = " + email +
             ", avatar = " + avatar +
-            ", class = " + class +
+            ", rate = " + rate +
             ", deleted = " + deleted +
         "}";
     }

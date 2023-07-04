@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    username: root
+    password: zyy20031222
+    url: jdbc:mysql:///iscweb

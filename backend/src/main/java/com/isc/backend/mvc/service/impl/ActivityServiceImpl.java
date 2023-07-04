@@ -1,8 +1,8 @@
-package com/isc/backend.mvc.service.impl;
+package com.isc.backend.mvc.service.impl;
 
-import com/isc/backend.mvc.entity.Activity;
-import com/isc/backend.mvc.mapper.ActivityMapper;
-import com/isc/backend.mvc.service.IActivityService;
+import com.isc.backend.mvc.entity.Activity;
+import com.isc.backend.mvc.mapper.ActivityMapper;
+import com.isc.backend.mvc.service.IActivityService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

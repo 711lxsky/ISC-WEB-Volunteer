@@ -1,11 +1,9 @@
-package com/isc/backend.mvc.entity;
+package com.isc.backend.mvc.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
@@ -16,7 +14,6 @@ import io.swagger.annotations.ApiModelProperty;
  * @since 2023-07-04
  */
 @TableName("activity_volunteer_relation")
-@ApiModel(value = "ActivityVolunteerRelation对象", description = "记录志愿者参与活动情况")
 public class ActivityVolunteerRelation implements Serializable {
 
     private static final long serialVersionUID = 1L;

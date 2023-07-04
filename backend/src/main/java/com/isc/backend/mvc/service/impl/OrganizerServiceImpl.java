@@ -1,8 +1,8 @@
-package com/isc/backend.mvc.service.impl;
+package com.isc.backend.mvc.service.impl;
 
-import com/isc/backend.mvc.entity.Organizer;
-import com/isc/backend.mvc.mapper.OrganizerMapper;
-import com/isc/backend.mvc.service.IOrganizerService;
+import com.isc.backend.mvc.entity.Organizer;
+import com.isc.backend.mvc.mapper.OrganizerMapper;
+import com.isc.backend.mvc.service.IOrganizerService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

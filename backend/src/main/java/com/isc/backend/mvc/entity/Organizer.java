@@ -1,10 +1,8 @@
-package com/isc/backend.mvc.entity;
+package com.isc.backend.mvc.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
@@ -14,7 +12,6 @@ import io.swagger.annotations.ApiModelProperty;
  * @author 711lxsky
  * @since 2023-07-04
  */
-@ApiModel(value = "Organizer对象", description = "组织者表")
 public class Organizer implements Serializable {
 
     private static final long serialVersionUID = 1L;

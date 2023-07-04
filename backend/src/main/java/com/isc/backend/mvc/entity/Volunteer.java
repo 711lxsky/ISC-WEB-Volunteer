@@ -1,10 +1,8 @@
-package com/isc/backend.mvc.entity;
+package com.isc.backend.mvc.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
@@ -14,7 +12,6 @@ import io.swagger.annotations.ApiModelProperty;
  * @author 711lxsky
  * @since 2023-07-04
  */
-@ApiModel(value = "Volunteer对象", description = "志愿者表")
 public class Volunteer implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,7 +33,9 @@ public class Volunteer implements Serializable {
 
     private Integer activityCount;
 
-    @ApiModelProperty("限制最大参与活动数")
+    /**
+     * 限制最大参与活动数
+     */
     private Integer activityMax;
 
     private Integer status;

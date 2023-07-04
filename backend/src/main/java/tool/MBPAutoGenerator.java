@@ -23,7 +23,7 @@ public class MBPAutoGenerator  {
                             .outputDir("C:\\Users\\86153\\Desktop\\GithubRep\\ISCWeb_Project\\backend\\src\\main\\java"); // 指定输出目录
                 })
                 .packageConfig(builder -> {
-                    builder.parent("com/isc/backend") // 设置父包名
+                    builder.parent("com.isc.backend") // 设置父包名
                             .moduleName(moduleName) // 设置父包模块名
                             .pathInfo(Collections.singletonMap(OutputFile.xml, mapper)); // 设置mapperXml生成路径
                 })

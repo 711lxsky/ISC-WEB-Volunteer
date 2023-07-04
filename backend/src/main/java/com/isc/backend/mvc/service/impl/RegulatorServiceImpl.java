@@ -1,8 +1,8 @@
-package com/isc/backend.mvc.service.impl;
+package com.isc.backend.mvc.service.impl;
 
-import com/isc/backend.mvc.entity.Regulator;
-import com/isc/backend.mvc.mapper.RegulatorMapper;
-import com/isc/backend.mvc.service.IRegulatorService;
+import com.isc.backend.mvc.entity.Regulator;
+import com.isc.backend.mvc.mapper.RegulatorMapper;
+import com.isc.backend.mvc.service.IRegulatorService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

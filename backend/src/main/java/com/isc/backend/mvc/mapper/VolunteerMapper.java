@@ -1,6 +1,6 @@
-package com/isc/backend.mvc.mapper;
+package com.isc.backend.mvc.mapper;
 
-import com/isc/backend.mvc.entity.Volunteer;
+import com.isc.backend.mvc.entity.Volunteer;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

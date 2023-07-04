@@ -1,8 +1,8 @@
-package com/isc/backend.mvc.service.impl;
+package com.isc.backend.mvc.service.impl;
 
-import com/isc/backend.mvc.entity.ActivityVolunteerRelation;
-import com/isc/backend.mvc.mapper.ActivityVolunteerRelationMapper;
-import com/isc/backend.mvc.service.IActivityVolunteerRelationService;
+import com.isc.backend.mvc.entity.ActivityVolunteerRelation;
+import com.isc.backend.mvc.mapper.ActivityVolunteerRelationMapper;
+import com.isc.backend.mvc.service.IActivityVolunteerRelationService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 

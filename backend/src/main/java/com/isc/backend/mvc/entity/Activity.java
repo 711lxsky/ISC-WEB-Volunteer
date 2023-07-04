@@ -1,11 +1,9 @@
-package com/isc/backend.mvc.entity;
+package com.isc.backend.mvc.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
@@ -15,7 +13,6 @@ import io.swagger.annotations.ApiModelProperty;
  * @author 711lxsky
  * @since 2023-07-04
  */
-@ApiModel(value = "Activity对象", description = "")
 public class Activity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -33,18 +30,26 @@ public class Activity implements Serializable {
 
     private String location;
 
-    @ApiModelProperty("所需最小的志愿者数量")
+    /**
+     * 所需最小的志愿者数量
+     */
     private Integer volunteerMin;
 
-    @ApiModelProperty("所需志愿者最大数")
+    /**
+     * 所需志愿者最大数
+     */
     private Integer volunteerMax;
 
     private Integer volunteerCurrentNumber;
 
-    @ApiModelProperty("活动状态")
+    /**
+     * 活动状态
+     */
     private Integer status;
 
-    @ApiModelProperty("活动描述")
+    /**
+     * 活动描述
+     */
     private String description;
 
     private Integer deleted;
