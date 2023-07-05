@@ -2,6 +2,7 @@ package com.isc.backend.mvc.service;
 
 import com.isc.backend.mvc.entity.Organizer;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.isc.backend.setting.Result;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IOrganizerService extends IService<Organizer> {
 
+    Result<?> addOrganizer(Organizer organizer);
 }

@@ -44,6 +44,10 @@ public class ImageController {
             file.transferTo(newFile);
             String url = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/image/" + newFileName;
             System.out.println("url地址："+url);
+            System.out.println((fileSavePath.length()));
+            System.out.println(newFile.getCanonicalPath());
+            System.out.println((newFile.getCanonicalPath()).length());
+            System.out.println(url.length());
             return Result.success("上传成功"+url);
         }
         catch (IOException e){

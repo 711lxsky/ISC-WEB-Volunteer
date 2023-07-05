@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com/isc/backend.mvc.mapper.VolunteerMapper">
+<mapper namespace="com.isc.backend.mvc.mapper.VolunteerMapper">
 
+    <select id="getVolunteerNumByName" parameterType="String" resultType="Integer">
+        select count(*) as volunteerNum
+        from volunteer
+        where name = #{volunteerName};
+    </select>
+
+    <select id="getVolunteerNumByPhone" parameterType="String" resultType="Integer">
+        select count(*) as volunteerNum
+        from volunteer where phone = #{volunteerPhone}
+    </select>
 </mapper>

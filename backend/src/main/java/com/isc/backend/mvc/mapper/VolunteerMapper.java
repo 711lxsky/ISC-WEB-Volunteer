@@ -13,4 +13,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface VolunteerMapper extends BaseMapper<Volunteer> {
 
+    Integer getVolunteerNumByName(String volunteerName);
+
+    Integer getVolunteerNumByPhone(String volunteerPhone);
 }

@@ -1,4 +1,4 @@
-package tool;
+package com.isc.backend.tool;
 
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;

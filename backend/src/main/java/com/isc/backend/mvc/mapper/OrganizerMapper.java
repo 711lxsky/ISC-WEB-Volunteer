@@ -13,4 +13,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface OrganizerMapper extends BaseMapper<Organizer> {
 
+     Integer getOrganizerNumByName(String organizerName);
+
+     Integer getOrganizerNumByPhone(String organizerPhone);
 }

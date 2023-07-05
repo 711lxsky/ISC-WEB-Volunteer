@@ -15,4 +15,7 @@ import org.springframework.stereotype.Controller;
 @RequestMapping("/mvc/activity")
 public class ActivityController {
 
+    public static void main(String[] args) {
+
+    }
 }

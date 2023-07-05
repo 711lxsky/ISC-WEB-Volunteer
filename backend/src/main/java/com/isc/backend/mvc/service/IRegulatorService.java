@@ -2,6 +2,7 @@ package com.isc.backend.mvc.service;
 
 import com.isc.backend.mvc.entity.Regulator;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.isc.backend.setting.Result;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IRegulatorService extends IService<Regulator> {
 
+    Result<?> addRegulator(Regulator regulator);
 }

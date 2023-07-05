@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com/isc/backend.mvc.mapper.RegulatorMapper">
+<mapper namespace="com.isc.backend.mvc.mapper.RegulatorMapper">
 
+    <select id="getRegulatorNumByName" parameterType="String" resultType="Integer">
+        select count(*) as regulatorNum
+        from regulator
+        where name = #{regulatorName};
+    </select>
+
+    <select id="getRegulatorNumByPhone" parameterType="String" resultType="Integer">
+        select count(*) as regulatorNum
+        from regulator
+        where phone = #{regulatorPhone};
+    </select>
 </mapper>

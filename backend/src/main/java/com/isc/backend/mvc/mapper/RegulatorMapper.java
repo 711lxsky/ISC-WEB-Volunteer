@@ -13,4 +13,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface RegulatorMapper extends BaseMapper<Regulator> {
 
+    Integer getRegulatorNumByName(String regulatorName);
+    Integer getRegulatorNumByPhone(String regulatorPhone);
 }
