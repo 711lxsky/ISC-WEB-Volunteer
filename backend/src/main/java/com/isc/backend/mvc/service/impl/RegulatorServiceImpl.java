@@ -1,6 +1,5 @@
 package com.isc.backend.mvc.service.impl;
 
-import com.isc.backend.config.AvatarConfig;
 import com.isc.backend.mvc.entity.Regulator;
 import com.isc.backend.mvc.mapper.RegulatorMapper;
 import com.isc.backend.mvc.service.IRegulatorService;
@@ -36,7 +35,7 @@ public class RegulatorServiceImpl extends ServiceImpl<RegulatorMapper, Regulator
         }
         regulator.setPassword(passwordEncoder.encode(regulator.getPassword()));
         regulator.setRate(Activity.RegulatorRate1.getNUM());
-        regulator.setAvatar(AvatarConfig.AvatarAccessPath()+ Avatar.RegulatorAvatar.getAvatarName());
+        regulator.setAvatar(Avatar.RegulatorAvatar.getAvatarName());
         if(this.save(regulator)){
             return Result.success(RCodeMessage.AddSuccess.getCode(), "管理者"+RCodeMessage.AddSuccess.getDescription());
         }

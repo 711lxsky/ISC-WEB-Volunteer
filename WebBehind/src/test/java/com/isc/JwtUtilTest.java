@@ -16,7 +16,8 @@ public class JwtUtilTest {
     public void testCreateJwt(){
         User user = new User();
         user.setUsername("jige");
-        user.setPassword("111111");
+        //user.setPassword("111111");不丢密码进去
+
         String token  = jwtUtil.createToken(user);
         System.out.println(token);
     }

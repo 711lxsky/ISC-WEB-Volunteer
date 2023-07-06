@@ -20,9 +20,8 @@ public class AvatarConfig implements WebMvcConfigurer {
     @Value("${web-port}")
     private String webPort;
 
-    @Value("$${avatar-server-path}")
+    @Value("${avatar-server-path}")
     private String avatarServer;
-
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -30,8 +29,9 @@ public class AvatarConfig implements WebMvcConfigurer {
                 .addResourceLocations("file:"+avatarSavePath);
     }
 
-    @Bean
-    public static String AvatarAccessPath(){
-       return "http://localhost:8888/avatar/";
+    public String setAvatarAccessPath(String avatarName){
+        return this.scheme+"://"+this.webServer+":"+this.webPort+"/"+
+                this.avatarServer+avatarName;
+        //return "http://localhost:8888/avatar/";
     }
 }

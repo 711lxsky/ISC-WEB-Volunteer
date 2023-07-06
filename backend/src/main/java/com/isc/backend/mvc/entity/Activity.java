@@ -26,7 +26,7 @@ public class Activity implements Serializable {
 
     private String theme;
 
-    private LocalDateTime dataTime;
+    private LocalDateTime dateTime;
 
     private String location;
 
@@ -86,12 +86,12 @@ public class Activity implements Serializable {
         this.theme = theme;
     }
 
-    public LocalDateTime getDataTime() {
-        return dataTime;
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
-    public void setDataTime(LocalDateTime dataTime) {
-        this.dataTime = dataTime;
+    public void setDateTime(LocalDateTime dataTime) {
+        this.dateTime = dataTime;
     }
 
     public String getLocation() {
@@ -157,7 +157,7 @@ public class Activity implements Serializable {
             ", organizerId = " + organizerId +
             ", name = " + name +
             ", theme = " + theme +
-            ", dataTime = " + dataTime +
+            ", dataTime = " + dateTime +
             ", location = " + location +
             ", volunteerMin = " + volunteerMin +
             ", volunteerMax = " + volunteerMax +

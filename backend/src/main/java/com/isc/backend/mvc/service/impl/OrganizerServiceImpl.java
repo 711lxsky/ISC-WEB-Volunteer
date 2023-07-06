@@ -1,6 +1,5 @@
 package com.isc.backend.mvc.service.impl;
 
-import com.isc.backend.config.AvatarConfig;
 import com.isc.backend.mvc.entity.Organizer;
 import com.isc.backend.mvc.mapper.OrganizerMapper;
 import com.isc.backend.mvc.service.IOrganizerService;
@@ -36,7 +35,7 @@ public class OrganizerServiceImpl extends ServiceImpl<OrganizerMapper, Organizer
         }
         organizer.setPassword(passwordEncoder.encode(organizer.getPassword()));
         organizer.setActivityMax(Activity.OrganizerClass1.getNUM());
-        organizer.setAvatar(AvatarConfig.AvatarAccessPath()+ Avatar.OrganizerAvatar.getAvatarName());
+        organizer.setAvatar(Avatar.OrganizerAvatar.getAvatarName());
         if(this.save(organizer)){
             return Result.success(RCodeMessage.AddSuccess.getCode(), "组织者"+RCodeMessage.AddSuccess.getDescription());
         }

@@ -4,6 +4,8 @@ import com.isc.backend.mvc.entity.Volunteer;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.isc.backend.setting.Result;
 
+import java.util.Map;
+
 /**
  * <p>
  * 志愿者表 服务类
@@ -15,4 +17,6 @@ import com.isc.backend.setting.Result;
 public interface IVolunteerService extends IService<Volunteer> {
 
     Result<?> addVolunteer(Volunteer volunteer);
+
+    Result<Map<String, Object>> loginVolunteer(Volunteer volunteer);
 }
