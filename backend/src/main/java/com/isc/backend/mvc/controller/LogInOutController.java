@@ -54,4 +54,16 @@ public class LogInOutController {
     public Result<Map<String,Object>> loginVolunteer(@RequestBody Volunteer volunteer){
         return volunteerService.loginVolunteer(volunteer);
     }
+
+    @ApiOperation("组织者登录接口")
+    @PostMapping("/login-organizer")
+    public Result<Map<String,Object>> loginOrganizer(@RequestBody Organizer organizer){
+        return organizerService.loginOrganizer(organizer);
+    }
+
+    @ApiOperation("管理者登录接口")
+    @PostMapping("/login-regulator")
+    public Result<Map<String,Object>> loginRegulator(@RequestBody Regulator regulator){
+        return regulatorService.loginRegulator(regulator);
+    }
 }

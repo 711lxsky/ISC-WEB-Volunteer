@@ -73,9 +73,10 @@ public class VolunteerServiceImpl extends ServiceImpl<VolunteerMapper, Volunteer
         }
         else {
             loginVolunteer.setPassword(null);
-            loginVolunteer.setAvatar(avatarConfig.setAvatarAccessPath(loginVolunteer.getAvatar()));
             String token = jwtUtil.createToken(loginVolunteer);
+            loginVolunteer.setAvatar(avatarConfig.setAvatarAccessPath(loginVolunteer.getAvatar()));
             Map<String,Object> data = new HashMap<>();
+            data.put("id",loginVolunteer.getId());
             data.put("name",loginVolunteer.getName());
             data.put("phoneNumber",loginVolunteer.getPhone());
             data.put("email",loginVolunteer.getEmail());

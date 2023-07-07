@@ -25,7 +25,7 @@ public class Organizer implements Serializable {
 
     private String phone;
 
-    private String eamil;
+    private String email;
 
     private String avatar;
 
@@ -65,12 +65,12 @@ public class Organizer implements Serializable {
         this.phone = phone;
     }
 
-    public String getEamil() {
-        return eamil;
+    public String getEmail() {
+        return email;
     }
 
-    public void setEamil(String eamil) {
-        this.eamil = eamil;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getAvatar() {
@@ -104,7 +104,7 @@ public class Organizer implements Serializable {
             ", name = " + name +
             ", password = " + password +
             ", phone = " + phone +
-            ", eamil = " + eamil +
+            ", eamil = " + email +
             ", avatar = " + avatar +
             ", activityMax = " + activityMax +
             ", deleted = " + deleted +

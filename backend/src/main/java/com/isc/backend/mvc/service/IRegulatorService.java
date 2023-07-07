@@ -4,6 +4,8 @@ import com.isc.backend.mvc.entity.Regulator;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.isc.backend.setting.Result;
 
+import java.util.Map;
+
 /**
  * <p>
  *  服务类
@@ -15,4 +17,6 @@ import com.isc.backend.setting.Result;
 public interface IRegulatorService extends IService<Regulator> {
 
     Result<?> addRegulator(Regulator regulator);
+
+    Result<Map<String, Object>> loginRegulator(Regulator regulator);
 }
