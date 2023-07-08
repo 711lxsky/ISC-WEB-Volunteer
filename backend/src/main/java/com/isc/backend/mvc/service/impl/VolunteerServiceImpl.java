@@ -39,15 +39,15 @@ public class VolunteerServiceImpl extends ServiceImpl<VolunteerMapper, Volunteer
 
     @Override
     public Result<?> addVolunteer(Volunteer volunteer) {
-        if(this.baseMapper.getVolunteerNumByName(volunteer.getName()) == User.RepeatNumMax.getNum()){
+        if(this.baseMapper.getVolunteerNumByName(volunteer.getName()).equals(User.RepeatNameMax.getNum())){
             return Result.fail(RCodeMessage.AddFail.getCode(), RCodeMessage.AddFail.getDescription()+":志愿者名重复");
         }
-        if(this.baseMapper.getVolunteerNumByPhone(volunteer.getPhone()) == User.RepeatPhoneMax.getNum()) {
+        if(this.baseMapper.getVolunteerNumByPhone(volunteer.getPhone()).equals(User.RepeatPhoneMax.getNum())) {
             return Result.fail(RCodeMessage.AddFail.getCode(), RCodeMessage.AddFail.getDescription() +
                     ":同一电话只能申请"+User.RepeatPhoneMax.getNum()+"个志愿者账号");
         }
         volunteer.setPassword(passwordEncoder.encode(volunteer.getPassword()));
-        volunteer.setActivityMax(Activity.VolunteerRate1.getNUM());
+        volunteer.setActivityMax(Activity.VolunteerRate1.getCode());
         volunteer.setAvatar(Avatar.VolunteerAvatar.getAvatarName());
         if(volunteer.getStatus() == null){
             volunteer.setStatus(com.isc.backend.setting.Volunteer.FreeShortTime.getCode());

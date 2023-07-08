@@ -37,15 +37,15 @@ public class RegulatorServiceImpl extends ServiceImpl<RegulatorMapper, Regulator
 
     @Override
     public Result<?> addRegulator(Regulator regulator) {
-        if(this.baseMapper.getRegulatorNumByName(regulator.getName()) == User.RepeatNumMax.getNum()){
+        if(this.baseMapper.getRegulatorNumByName(regulator.getName()).equals(User.RepeatNameMax.getNum())){
             return Result.fail((RCodeMessage.AddFail.getCode()),RCodeMessage.AddFail.getDescription()+":管理者名重复");
         }
-        if(this.baseMapper.getRegulatorNumByPhone(regulator.getPhone()) == User.RepeatPhoneMax.getNum()){
+        if(this.baseMapper.getRegulatorNumByPhone(regulator.getPhone()).equals(User.RepeatPhoneMax.getNum())){
             return Result.fail(RCodeMessage.AddFail.getCode(), RCodeMessage.AddFail.getDescription()+
                     ":同一个电话只能注册"+User.RepeatPhoneMax.getNum()+"个管理者账号");
         }
         regulator.setPassword(passwordEncoder.encode(regulator.getPassword()));
-        regulator.setRate(Activity.RegulatorRate1.getNUM());
+        regulator.setRate(Activity.RegulatorRate1.getCode());
         regulator.setAvatar(Avatar.RegulatorAvatar.getAvatarName());
         if(this.save(regulator)){
             return Result.success(RCodeMessage.AddSuccess.getCode(), "管理者"+RCodeMessage.AddSuccess.getDescription());

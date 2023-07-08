@@ -37,15 +37,15 @@ public class OrganizerServiceImpl extends ServiceImpl<OrganizerMapper, Organizer
 
     @Override
     public Result<?> addOrganizer(Organizer organizer) {
-        if(this.baseMapper.getOrganizerNumByName(organizer.getName()) == User.RepeatNumMax.getNum()){
+        if(this.baseMapper.getOrganizerNumByName(organizer.getName()).equals(User.RepeatNameMax.getNum())){
             return Result.fail(RCodeMessage.AddFail.getCode(), RCodeMessage.AddFail.getDescription()+":组织者名重复");
         }
-        if(this.baseMapper.getOrganizerNumByPhone(organizer.getPhone()) == User.RepeatPhoneMax.getNum()){
+        if(this.baseMapper.getOrganizerNumByPhone(organizer.getPhone()).equals(User.RepeatPhoneMax.getNum())){
             return Result.fail(RCodeMessage.AddFail.getCode(), RCodeMessage.AddFail.getDescription()+
                     ":同一电话只能申请"+User.RepeatPhoneMax.getNum()+"个组织者账号");
         }
         organizer.setPassword(passwordEncoder.encode(organizer.getPassword()));
-        organizer.setActivityMax(Activity.OrganizerClass1.getNUM());
+        organizer.setActivityMax(Activity.OrganizerClass1.getCode());
         organizer.setAvatar(Avatar.OrganizerAvatar.getAvatarName());
         if(this.save(organizer)){
             return Result.success(RCodeMessage.AddSuccess.getCode(), "组织者"+RCodeMessage.AddSuccess.getDescription());

@@ -2,6 +2,7 @@ package com.isc.backend.mvc.mapper;
 
 import com.isc.backend.mvc.entity.Activity;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -12,5 +13,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2023-07-04
  */
 public interface ActivityMapper extends BaseMapper<Activity> {
-
+    Integer getActivityNumByNameAndTheme(@Param("activityName") String activityName, @Param("activityTheme") String activityTheme);
 }

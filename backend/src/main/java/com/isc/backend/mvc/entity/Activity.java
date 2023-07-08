@@ -22,6 +22,8 @@ public class Activity implements Serializable {
 
     private Integer organizerId;
 
+    private String comment;
+
     private String name;
 
     private String theme;
@@ -88,6 +90,14 @@ public class Activity implements Serializable {
 
     public LocalDateTime getDateTime() {
         return dateTime;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public void setDateTime(LocalDateTime dataTime) {

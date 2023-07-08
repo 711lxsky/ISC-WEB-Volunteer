@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Getter
 @AllArgsConstructor
 public enum User {
-    RepeatNumMax(1,"用户名重复最大限制数"),
+    RepeatNameMax(1,"用户名重复最大限制数"),
     RepeatPhoneMax(2,"用户电话重复最大限制数");
 
     private final Integer Num;
