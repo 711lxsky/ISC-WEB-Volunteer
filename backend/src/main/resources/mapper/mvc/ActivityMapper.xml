@@ -2,10 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.isc.backend.mvc.mapper.ActivityMapper">
 
+    <select id="getApplyActivityNumOfOrganizer" parameterType="Integer" resultType="Integer">
+        select count(*) as activityNum
+        from activity
+        where organizer_id = #{organizerId} and status = #{activityStatus}
+    </select>
+
     <select id="getActivityNumByNameAndTheme" parameterType="String" resultType="Integer">
         select count(*) as activityNum
         from activity
         where name = #{activityName} and theme = #{activityTheme}
     </select>
+
+    <update id="updateActivityStatusById" parameterType="Integer" >
+        update activity
+        set status = #{activityStatus}
+        where id = #{activityId}
+    </update>
+
+    <update id="updateActivityVolunteerNum" parameterType="Integer">
+        update activity
+        set volunteer_current_number = #{activityVolunteerNum}
+        where id = #{activityId}
+    </update>
 
 </mapper>

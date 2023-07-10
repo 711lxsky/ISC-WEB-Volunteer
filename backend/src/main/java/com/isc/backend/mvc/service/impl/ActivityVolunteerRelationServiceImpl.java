@@ -17,4 +17,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ActivityVolunteerRelationServiceImpl extends ServiceImpl<ActivityVolunteerRelationMapper, ActivityVolunteerRelation> implements IActivityVolunteerRelationService {
 
+    @Override
+    public Boolean addRelation(Integer activityId ,Integer volunteerId) {
+        return this.baseMapper.addRelation(activityId,volunteerId);
+    }
 }

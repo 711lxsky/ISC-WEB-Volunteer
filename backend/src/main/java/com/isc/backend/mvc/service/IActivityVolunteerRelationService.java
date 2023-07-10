@@ -13,4 +13,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IActivityVolunteerRelationService extends IService<ActivityVolunteerRelation> {
 
+    Boolean addRelation(Integer volunteerId, Integer activityId);
+
+
 }

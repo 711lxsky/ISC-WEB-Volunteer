@@ -2,4 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.isc.backend.mvc.mapper.ActivityVolunteerRelationMapper">
 
+    <insert id="addRelation" parameterType="integer" >
+        insert into activity_volunteer_relation
+            (activity_id,volunteer_id)
+        values
+            (#{activityId},#{VolunteerId})
+    </insert>
 </mapper>

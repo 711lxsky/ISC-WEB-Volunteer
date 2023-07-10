@@ -25,6 +25,16 @@ public class ActivityVolunteerRelation implements Serializable {
 
     private Integer volunteerId;
 
+    private Integer deleted;
+
+    public Integer getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Integer deleted) {
+        this.deleted = deleted;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -55,6 +65,7 @@ public class ActivityVolunteerRelation implements Serializable {
             "id = " + id +
             ", activityId = " + activityId +
             ", volunteerId = " + volunteerId +
+                ", deleted = " + deleted +
         "}";
     }
 }

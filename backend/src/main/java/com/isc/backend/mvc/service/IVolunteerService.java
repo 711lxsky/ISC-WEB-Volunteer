@@ -19,4 +19,6 @@ public interface IVolunteerService extends IService<Volunteer> {
     Result<?> addVolunteer(Volunteer volunteer);
 
     Result<Map<String, Object>> loginVolunteer(Volunteer volunteer);
+
+    Integer updateVolunteerActivityNum(Volunteer volunteer);
 }

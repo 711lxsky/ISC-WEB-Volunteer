@@ -12,4 +12,10 @@
         select count(*) as volunteerNum
         from volunteer where phone = #{volunteerPhone}
     </select>
+
+    <update id="updateActivityNumOfVolunteer" parameterType="integer">
+        update volunteer
+        set activity_count = #{activityNum}
+        where id = #{volunteerId}
+    </update>
 </mapper>

@@ -14,4 +14,10 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface ActivityMapper extends BaseMapper<Activity> {
     Integer getActivityNumByNameAndTheme(@Param("activityName") String activityName, @Param("activityTheme") String activityTheme);
+
+    Integer getApplyActivityNumOfOrganizer(@Param("organizerId") Integer organizerId,@Param("activityStatus") Integer activityStatus);
+
+    Integer updateActivityStatusById(@Param("activityId")Integer activityId,@Param("activityStatus")Integer activityStatus);
+
+    Integer updateActivityVolunteerNum(@Param("activityId") Integer activityId,@Param("activityVolunteerNum") Integer activityVolunteerNum);
 }

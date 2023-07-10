@@ -5,7 +5,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Volunteer {
+public enum VolunteerSetting {
+    VolunteerRate1(4,"志愿者等级1"),
+    VolunteerRate2(8,"志愿者等级2"),
+    VolunteerRate3(16,"志愿者等级3"),
     ScoreDefault(0,"初始得分"),
     NotFreeLongTime(0,"长时间忙碌中"),
     NotFreeShortTime(1,"短期没空"),

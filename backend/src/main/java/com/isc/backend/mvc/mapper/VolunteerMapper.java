@@ -2,6 +2,7 @@ package com.isc.backend.mvc.mapper;
 
 import com.isc.backend.mvc.entity.Volunteer;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -16,4 +17,6 @@ public interface VolunteerMapper extends BaseMapper<Volunteer> {
     Integer getVolunteerNumByName(String volunteerName);
 
     Integer getVolunteerNumByPhone(String volunteerPhone);
+
+    Integer updateActivityNumOfVolunteer(@Param("activityNum") Integer activityNum, @Param("volunteerId") Integer volunteerId);
 }

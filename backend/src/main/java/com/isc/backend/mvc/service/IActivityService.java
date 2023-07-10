@@ -4,6 +4,7 @@ import com.isc.backend.mvc.entity.Activity;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.isc.backend.setting.Result;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,4 +24,14 @@ public interface IActivityService extends IService<Activity> {
     Result<?> rejectActivity(Activity activity);
 
     Result<?> passActivity(Activity activity);
+
+    Result<Map<String, Object>> infoConveneActivityByTheme(String theme, Long pageNum, Long pageSize);
+
+    Result<List<Activity>> infoActivityAll();
+
+    Result<?> updateConveneActivity(Activity activity);
+
+    Result<?> updateCancelActivity(Integer id);
+
+    Result<?> participateActivity(Activity activity);
 }

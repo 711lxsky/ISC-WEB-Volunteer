@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Avatar {
+public enum AvatarSetting {
     VolunteerAvatar("volunteer-default.png"),
     OrganizerAvatar("organizer-default.png"),
     RegulatorAvatar("regulator-default.png");
