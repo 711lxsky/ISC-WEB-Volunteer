@@ -33,6 +33,16 @@ public class Organizer implements Serializable {
 
     private Integer deleted;
 
+    private Integer currentActivityNumber;
+
+    public Integer getCurrentActivityNumber() {
+        return currentActivityNumber;
+    }
+
+    public void setCurrentActivityNumber(Integer currentActivityNumber) {
+        this.currentActivityNumber = currentActivityNumber;
+    }
+
     public Integer getId() {
         return id;
     }

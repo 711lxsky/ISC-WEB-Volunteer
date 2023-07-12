@@ -4,6 +4,8 @@ import com.isc.backend.mvc.entity.ActivityVolunteerRelation;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * <p>
  * 记录志愿者参与活动情况 Mapper 接口
@@ -16,4 +18,5 @@ public interface ActivityVolunteerRelationMapper extends BaseMapper<ActivityVolu
 
     Boolean addRelation(@Param("activityId") Integer activityId,@Param("VolunteerId") Integer volunteerId);
 
+    List<Integer> getActivityIds(@Param("volunteerId") Integer volunteerId);
 }

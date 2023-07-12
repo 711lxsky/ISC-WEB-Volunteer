@@ -3,23 +3,26 @@ package com.isc.backend.mvc.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.isc.backend.Util.JwtUtil;
+import com.isc.backend.Util.RequestUtil;
 import com.isc.backend.mvc.entity.Activity;
+import com.isc.backend.mvc.entity.ActivityVolunteerRelation;
 import com.isc.backend.mvc.entity.Organizer;
 import com.isc.backend.mvc.entity.Volunteer;
 import com.isc.backend.mvc.mapper.ActivityMapper;
 import com.isc.backend.mvc.service.IActivityService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.isc.backend.setting.ActivitySetting;
 import com.isc.backend.setting.RCodeMessage;
 import com.isc.backend.setting.Result;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -29,8 +32,12 @@ import java.util.*;
  * @author 711lxsky
  * @since 2023-07-04
  */
+@Slf4j
 @Service
 public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> implements IActivityService {
+
+    @Resource
+    private RequestUtil requestUtil;
 
     @Resource
     private JwtUtil jwtUtil;
@@ -41,11 +48,12 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
     @Resource
     private VolunteerServiceImpl volunteerService;
 
+    @Resource
+    private OrganizerServiceImpl organizerService;
+
     @Override
     public Result<?> applyActivity(Activity activity) {
-        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
-        String token = request.getHeader(jwtUtil.getTokenName());
-        Organizer tokenOrganizer = jwtUtil.parseToken(token, Organizer.class);
+        Organizer tokenOrganizer = jwtUtil.parseToken(requestUtil.getToken(), Organizer.class);
         if (this.baseMapper.getApplyActivityNumOfOrganizer(activity.getOrganizerId(),ActivitySetting.Applying.getCode()).equals(tokenOrganizer.getActivityMax())) {
             return Result.fail(RCodeMessage.ApplyActivityFail.getCode(), RCodeMessage.ApplyActivityFail.getDescription() + ":已达到组织者最大活动限制数");
         }
@@ -55,7 +63,12 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
         }
         activity.setStatus(ActivitySetting.Applying.getCode());
         if (this.save(activity)) {
-            return Result.success(RCodeMessage.ApplyActivitySuccess.getCode(), RCodeMessage.ApplyActivitySuccess.getDescription());
+            if(this.organizerService.addActivityNumOfOrganizer(activity.getOrganizerId())){
+                return Result.success(RCodeMessage.ApplyActivitySuccess.getCode(), RCodeMessage.ApplyActivitySuccess.getDescription());
+            }
+            else{
+                return Result.fail(RCodeMessage.ApplyActivityFail.getCode(), RCodeMessage.AddFail.getDescription()+"后台组织者数据错误");
+            }
         } else {
             return Result.fail(RCodeMessage.ApplyActivityFail.getCode(), RCodeMessage.ApplyActivityFail.getDescription() + "后台志愿活动数据新增出错");
         }
@@ -80,10 +93,14 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
         wrapper.lambda().eq(Activity::getId, activity.getId());
         int updateDataNum = this.baseMapper.update(activity, wrapper);
         if (updateDataNum == 1) {
-            return Result.success(RCodeMessage.RejectActivitySuccess.getCode(), RCodeMessage.RejectActivitySuccess.getDescription());
-        } else {
-            return Result.success(RCodeMessage.RejectActivityFail.getCode(), RCodeMessage.RejectActivityFail.getDescription() + ":后台数据异常");
+            if(organizerService.reduceActivityNumOfOrganizer(activity.getOrganizerId())){
+                return Result.success(RCodeMessage.RejectActivitySuccess.getCode(), RCodeMessage.RejectActivitySuccess.getDescription());
+            }
+            else {
+                return Result.fail(RCodeMessage.RejectActivityFail.getCode(), RCodeMessage.RejectActivityFail.getDescription()+":组织者数据异常");
+            }
         }
+        return Result.fail(RCodeMessage.RejectActivityFail.getCode(), RCodeMessage.RejectActivityFail.getDescription() + ":后台数据异常");
     }
 
     @Override
@@ -92,16 +109,13 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
         int updateDataNum = this.baseMapper.updateById(activity);
         if (updateDataNum == 1) {
             return Result.success(RCodeMessage.PassActivitySuccess.getCode(), RCodeMessage.PassActivitySuccess.getDescription());
-        } else {
-            return Result.fail(RCodeMessage.PassActivityFail.getCode(), RCodeMessage.PassActivityFail.getDescription() + ":后台数据异常");
         }
+        return Result.fail(RCodeMessage.PassActivityFail.getCode(), RCodeMessage.PassActivityFail.getDescription() + ":后台数据异常");
     }
 
     @Override
     public Result<List<Activity>> infoActivityAll() {
-        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
-        String token = request.getHeader(jwtUtil.getTokenName());
-        Organizer tokenOrganizer = jwtUtil.parseToken(token,Organizer.class);
+        Organizer tokenOrganizer = jwtUtil.parseToken(requestUtil.getToken(),Organizer.class);
         LambdaQueryWrapper<Activity> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Activity::getOrganizerId,tokenOrganizer.getId());
         List<Activity> data = this.baseMapper.selectList(wrapper);
@@ -110,25 +124,29 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
 
     @Override
     public Result<?> updateConveneActivity(Activity activity) {
+        if(!activity.getStatus().equals(ActivitySetting.Passed.getCode())){
+            return Result.fail(RCodeMessage.ConveneActivityFail.getCode(), RCodeMessage.ConveneActivityFail.getDescription()+":当前活动非通过状态");
+        }
         activity.setStatus(ActivitySetting.Convening.getCode());
         int updateDataNum = this.baseMapper.updateById(activity);
         if(updateDataNum == 1){
             return Result.success(RCodeMessage.ConveneActivitySuccess.getCode(), RCodeMessage.ConveneActivitySuccess.getDescription());
         }
-        else {
-            return Result.fail(RCodeMessage.ConveneActivityFail.getCode(), RCodeMessage.ConveneActivityFail.getDescription()+":数据异常");
-        }
+        return Result.fail(RCodeMessage.ConveneActivityFail.getCode(), RCodeMessage.ConveneActivityFail.getDescription()+":数据异常");
     }
 
     @Override
-    public Result<?> updateCancelActivity(Integer id) {
-        int cancelActivityNum = this.baseMapper.updateActivityStatusById(id,ActivitySetting.Canceled.getCode());
+    public Result<?> updateCancelActivity(Activity activity) {
+        int cancelActivityNum = this.baseMapper.updateActivityStatusById(activity.getId(),ActivitySetting.Canceled.getCode());
         if(cancelActivityNum == 1){
-            return Result.success(RCodeMessage.CancelActivitySuccess.getCode(), RCodeMessage.CancelActivitySuccess.getDescription());
+            if(organizerService.reduceActivityNumOfOrganizer(activity.getOrganizerId())){
+                return Result.success(RCodeMessage.CancelActivitySuccess.getCode(), RCodeMessage.CancelActivitySuccess.getDescription());
+            }
+            else {
+                return Result.fail(RCodeMessage.CancelActivityFail.getCode(), RCodeMessage.CancelActivityFail.getDescription()+":组织者数据异常");
+            }
         }
-        else {
-            return Result.fail(RCodeMessage.CancelActivityFail.getCode(), RCodeMessage.CancelActivityFail.getDescription()+":数据异常");
-        }
+        return Result.fail(RCodeMessage.CancelActivityFail.getCode(), RCodeMessage.CancelActivityFail.getDescription()+":数据异常");
     }
 
     @Override
@@ -148,28 +166,90 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
     @Override
     public Result<?> participateActivity(Activity activity) {
         if(activity.getVolunteerCurrentNumber().equals(activity.getVolunteerMax())){
-            return Result.fail(RCodeMessage.ParticipateActivityFail.getCode(), RCodeMessage.ParticipateActivityFail.getDescription()+":已达最大限制人数");
+            return Result.fail(RCodeMessage.ParticipateActivityFail.getCode(), RCodeMessage.ParticipateActivityFail.getDescription()+":活动人员已满");
         }
-        activity.setVolunteerCurrentNumber(activity.getVolunteerCurrentNumber()+1);
-        int updateActivityNum = this.baseMapper.updateActivityVolunteerNum(activity.getId(),activity.getVolunteerCurrentNumber());
-        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
-        String token = request.getHeader(jwtUtil.getTokenName());
-        Volunteer tokenVolunteer = jwtUtil.parseToken(token,Volunteer.class);
-        tokenVolunteer.setActivityCount(tokenVolunteer.getActivityCount()+1);
-        int updateVolunteerNum = this.volunteerService.updateVolunteerActivityNum(tokenVolunteer);
+        int updateActivityNum = this.baseMapper.addActivityVolunteerNum(activity.getId());
         if(updateActivityNum != 1){
             return Result.fail(RCodeMessage.ParticipateActivityFail.getCode(), RCodeMessage.ParticipateActivityFail.getDescription()+":后台活动数据错误");
         }
-        else if(updateVolunteerNum != 1){
+
+        Volunteer tokenVolunteer = jwtUtil.parseToken(requestUtil.getToken(),Volunteer.class);
+
+        if(tokenVolunteer.getActivityCount().equals(tokenVolunteer.getActivityMax())){
+            return Result.fail(RCodeMessage.ParticipateActivityFail.getCode(),RCodeMessage.ParticipateActivityFail.getDescription()+":参与活动数已达最大上限");
+        }
+        tokenVolunteer.setActivityCount(tokenVolunteer.getActivityCount()+1);
+        int updateVolunteerNum = volunteerService.updateVolunteerActivityNum(tokenVolunteer);
+
+        if(updateVolunteerNum != 1){
             return Result.fail(RCodeMessage.ParticipateActivityFail.getCode(), RCodeMessage.ParticipateActivityFail.getDescription()+":后台志愿者数据错误");
         }
-        else {
-            if(activityVolunteerRelationService.addRelation(activity.getId(),tokenVolunteer.getId())){
+        if(activityVolunteerRelationService.addRelation(activity.getId(),tokenVolunteer.getId())){
                 return Result.success(RCodeMessage.ParticipateActivitySuccess.getCode(), RCodeMessage.ParticipateActivitySuccess.getDescription());
             }
-            else {
+        else {
                 return Result.fail(RCodeMessage.ParticipateActivityFail.getCode(), RCodeMessage.ParticipateActivityFail.getDescription()+":后台志愿者与活动关系数据错误");
             }
+    }
+
+    @Override
+    public Result<List<Activity>> infoParticipateActivity() {
+        List<Integer> activityIds = activityVolunteerRelationService.getActivityIdsOfVolunteer();
+        List<Activity> activities = new ArrayList<>();
+        for(Integer id : activityIds){
+            System.out.println(id);
+            LambdaQueryWrapper<Activity> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(Activity::getId,id)
+                            .eq(Activity::getStatus,ActivitySetting.Convening.getCode());
+            Activity activity = this.baseMapper.selectOne(wrapper);
+            if(activity != null){
+                activities.add(activity);
+            }
         }
+        return Result.success(RCodeMessage.InfoParticipateActivitySuccess.getCode(), RCodeMessage.InfoParticipateActivitySuccess.getDescription(),activities);
+    }
+
+    @Override
+    public Result<?> secedeParticipateActivity(ActivityVolunteerRelation relation) {
+        int updateActivityNum = this.baseMapper.reduceActivityVolunteerNum(relation.getActivityId());
+        if(updateActivityNum != 1){
+            return Result.fail(RCodeMessage.SecedeActivityFail.getCode(), RCodeMessage.SecedeActivityFail.getDescription()+":活动数据异常");
+        }
+        if(! this.volunteerService.reduceActivityNum(relation.getVolunteerId())){
+            return Result.fail(RCodeMessage.SecedeActivityFail.getCode(), RCodeMessage.SecedeActivityFail.getDescription()+":志愿者数据异常");
+        }
+        if(! activityVolunteerRelationService.deleteRelation(relation.getActivityId(),relation.getVolunteerId())){
+            return Result.fail(RCodeMessage.SecedeActivityFail.getCode(), RCodeMessage.SecedeActivityFail.getDescription()+":活动志愿者关系异常");
+        }
+        return Result.success(RCodeMessage.SecedeActivitySuccess.getCode(), RCodeMessage.SecedeActivitySuccess.getDescription());
+    }
+
+    @Override
+    public Result<?> proceedActivity(Activity activity) {
+        if(activity.getVolunteerCurrentNumber() < (activity.getVolunteerMin())){
+            return Result.fail(RCodeMessage.ProceedActivityFail.getCode(), RCodeMessage.ProceedActivityFail.getDescription()+":未达到最低目标人数");
+        }
+
+        if(this.baseMapper.updateActivityStatusById(activity.getId(),ActivitySetting.Conducting.getCode()) != 1){
+            return Result.fail(RCodeMessage.ProceedActivityFail.getCode(), RCodeMessage.ProceedActivityFail.getDescription()+":活动数据异常");
+        }
+        return Result.success(RCodeMessage.ProceedActivitySuccess.getCode(), RCodeMessage.ProceedActivitySuccess.getDescription());
+    }
+
+    @Override
+    public Result<List<Activity>> infoProceedActivityForVolunteer() {
+        List<Integer> activityIds = activityVolunteerRelationService.getActivityIdsOfVolunteer();
+        List<Activity> activities = new ArrayList<>();
+        for(Integer activityId : activityIds){
+            System.out.println(activityId);
+            LambdaQueryWrapper<Activity> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(Activity::getId,activityId)
+                    .eq(Activity::getStatus,ActivitySetting.Conducting.getCode());
+            Activity activity = this.baseMapper.selectOne(wrapper);
+            if(activity != null){
+                activities.add(activity);
+            }
+        }
+        return Result.success(RCodeMessage.InfoProceedActivitySuccess.getCode(), RCodeMessage.InfoProceedActivitySuccess.getDescription(),activities);
     }
 }

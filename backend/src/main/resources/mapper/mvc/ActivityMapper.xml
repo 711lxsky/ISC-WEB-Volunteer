@@ -5,25 +5,33 @@
     <select id="getApplyActivityNumOfOrganizer" parameterType="Integer" resultType="Integer">
         select count(*) as activityNum
         from activity
-        where organizer_id = #{organizerId} and status = #{activityStatus}
+        where organizer_id = #{organizerId} and status = #{activityStatus} and deleted = 0
     </select>
 
     <select id="getActivityNumByNameAndTheme" parameterType="String" resultType="Integer">
         select count(*) as activityNum
         from activity
-        where name = #{activityName} and theme = #{activityTheme}
+        where name = #{activityName} and theme = #{activityTheme} and deleted = 0
     </select>
 
     <update id="updateActivityStatusById" parameterType="Integer" >
         update activity
         set status = #{activityStatus}
-        where id = #{activityId}
+        where id = #{activityId} and deleted = 0
     </update>
 
-    <update id="updateActivityVolunteerNum" parameterType="Integer">
+    <update id="addActivityVolunteerNum" parameterType="Integer">
         update activity
-        set volunteer_current_number = #{activityVolunteerNum}
-        where id = #{activityId}
+        set volunteer_current_number = volunteer_current_number + 1
+        where id = #{activityId} and deleted = 0
     </update>
+
+    <update id="reduceActivityVolunteerNum" parameterType="integer">
+        update activity
+        set volunteer_current_number = volunteer_current_number - 1
+        where id = #{activityId} and deleted = 0
+    </update>
+
+
 
 </mapper>

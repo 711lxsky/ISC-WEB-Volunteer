@@ -1,6 +1,7 @@
 package com.isc.backend.mvc.controller;
 
 import com.isc.backend.mvc.entity.Activity;
+import com.isc.backend.mvc.entity.ActivityVolunteerRelation;
 import com.isc.backend.mvc.service.IActivityService;
 import com.isc.backend.setting.Result;
 import io.swagger.annotations.ApiOperation;
@@ -62,10 +63,10 @@ public class ActivityController {
         return activityService.updateConveneActivity(activity);
     }
 
-    @ApiOperation("组织者取消活动接口")
+    @ApiOperation("取消活动接口")
     @PutMapping("/update-cancel")
     public Result<?> updateCancelActivity(@RequestBody Activity activity){
-        return activityService.updateCancelActivity(activity.getId());
+        return activityService.updateCancelActivity(activity);
     }
 
     @ApiOperation("根据活动主题查询召集中状态活动接口")
@@ -80,5 +81,29 @@ public class ActivityController {
     @PostMapping("/participate")
     public Result<?> participateActivity(@RequestBody Activity activity){
         return activityService.participateActivity(activity);
+    }
+
+    @ApiOperation("志愿者查询响应召集的所有活动接口")
+    @GetMapping("/volunteer-info-participate")
+    public Result<List<Activity>> infoParticipateActivity(){
+        return activityService.infoParticipateActivity();
+    }
+
+    @ApiOperation("志愿者退出响应参加的活动接口")
+    @DeleteMapping("/volunteer-secede")
+    public Result<?> secedeParticipateActivity(@RequestBody ActivityVolunteerRelation relation){
+        return activityService.secedeParticipateActivity(relation);
+    }
+
+    @ApiOperation("组织者将活动状态设置为进行中接口")
+    @PutMapping("/proceed")
+    public Result<?> proceedActivity(@RequestBody Activity activity){
+        return activityService.proceedActivity(activity);
+    }
+
+    @ApiOperation("志愿者查询自身进行中的活动接口")
+    @GetMapping("/volunteer-info-proceed")
+    public Result<List<Activity>> infoProceedActivityForVolunteer(){
+        return activityService.infoProceedActivityForVolunteer();
     }
 }

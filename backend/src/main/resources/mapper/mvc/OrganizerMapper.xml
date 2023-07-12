@@ -5,12 +5,24 @@
     <select id="getOrganizerNumByName" parameterType="String" resultType="Integer">
         select count(*) as organizerNum
         from organizer
-        where name = #{organizerName};
+        where name = #{organizerName} and deleted = 0
     </select>
 
     <select id="getOrganizerNumByPhone" parameterType="String" resultType="Integer">
         select count(*) as organizerNum
         from organizer
-        where phone = #{organizerPhone}
+        where phone = #{organizerPhone} and deleted = 0
     </select>
+
+    <update id="addActivityNum" parameterType="integer">
+        update organizer
+        set current_activity_number = current_activity_number + 1
+        where id = #{organizerId} and deleted = 0
+    </update>
+
+    <update id="reduceActivityNum" parameterType="integer">
+        update organzier
+        set current_activity_number = current_activity_number - 1
+        where id = #{organizerId} and deleted = 0
+    </update>
 </mapper>

@@ -2,6 +2,7 @@ package com.isc.backend.mvc.mapper;
 
 import com.isc.backend.mvc.entity.Organizer;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -16,4 +17,8 @@ public interface OrganizerMapper extends BaseMapper<Organizer> {
      Integer getOrganizerNumByName(String organizerName);
 
      Integer getOrganizerNumByPhone(String organizerPhone);
+
+     Integer addActivityNum(@Param("organizerId") Integer organizerId);
+
+     Integer reduceActivityNum(Integer organizerId);
 }

@@ -66,6 +66,7 @@ public class JwtUtil {
                 .setSigningKey(encodeSecret(JWT_KEY))
                 .parseClaimsJws(token)
                 .getBody();
+        log.info(body.toString());
         return JSON.parseObject(body.getSubject(),tClass);
     }
 

@@ -29,7 +29,17 @@ public enum RCodeMessage {
     CancelActivitySuccess(2100,"志愿活动取消成功"),
     CancelActivityFail(2101,"志愿活动取消失败"),
     ParticipateActivitySuccess(2110,"志愿活动参与成功"),
-    ParticipateActivityFail(2111,"志愿活动参与失败");
+    ParticipateActivityFail(2111,"志愿活动参与失败"),
+    InfoParticipateActivitySuccess(2120,"查询处于召集状态中我参与的活动成功"),
+    InfoParticipateActivityFail(2121,"查询处于召集状态中我参与的活动失败"),
+    SecedeActivitySuccess(2130,"退出响应参加的活动成功"),
+    SecedeActivityFail(2131,"退出响应参加的活动失败"),
+    ProceedActivitySuccess(2140,"修改活动状态为进行中成功"),
+    ProceedActivityFail(2141,"修改活动状态为进行中失败"),
+    InfoProceedActivitySuccess(2150,"志愿者查询进行中活动成功"),
+    InfoProceedActivityFail(2151,"志愿者查询进行中活动失败");
+
+
     private final Integer code;
     private final String description;
 }

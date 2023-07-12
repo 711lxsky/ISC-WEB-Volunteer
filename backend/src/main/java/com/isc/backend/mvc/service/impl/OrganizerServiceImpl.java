@@ -1,6 +1,7 @@
 package com.isc.backend.mvc.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.isc.backend.Util.JwtUtil;
 import com.isc.backend.config.AvatarConfig;
 import com.isc.backend.mvc.entity.Organizer;
@@ -80,5 +81,26 @@ public class OrganizerServiceImpl extends ServiceImpl<OrganizerMapper, Organizer
             data.put(jwtUtil.getTokenName(),token);
             return Result.success(RCodeMessage.LoginSuccess.getCode(), "组织者"+RCodeMessage.LoginSuccess.getDescription(),data);
         }
+    }
+
+
+    @Override
+    public boolean addActivityNumOfOrganizer(Integer organizerId) {
+        int updateDataNum = this.baseMapper.addActivityNum(organizerId);
+        if(updateDataNum == 1){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean reduceActivityNumOfOrganizer(Integer organizerId) {
+        int updateDataNum = this.baseMapper.reduceActivityNum(organizerId);
+        if (updateDataNum == 1){
+            return true;
+        }
+        return false;
     }
 }

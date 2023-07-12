@@ -5,12 +5,12 @@
     <select id="getRegulatorNumByName" parameterType="String" resultType="Integer">
         select count(*) as regulatorNum
         from regulator
-        where name = #{regulatorName};
+        where name = #{regulatorName} and deleted = 0
     </select>
 
     <select id="getRegulatorNumByPhone" parameterType="String" resultType="Integer">
         select count(*) as regulatorNum
         from regulator
-        where phone = #{regulatorPhone};
+        where phone = #{regulatorPhone} and deleted = 0
     </select>
 </mapper>

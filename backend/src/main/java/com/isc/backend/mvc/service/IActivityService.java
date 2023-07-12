@@ -2,6 +2,7 @@ package com.isc.backend.mvc.service;
 
 import com.isc.backend.mvc.entity.Activity;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.isc.backend.mvc.entity.ActivityVolunteerRelation;
 import com.isc.backend.setting.Result;
 
 import java.util.List;
@@ -31,7 +32,15 @@ public interface IActivityService extends IService<Activity> {
 
     Result<?> updateConveneActivity(Activity activity);
 
-    Result<?> updateCancelActivity(Integer id);
+    Result<?> updateCancelActivity(Activity activity);
 
     Result<?> participateActivity(Activity activity);
+
+    Result<List<Activity>> infoParticipateActivity();
+
+    Result<?> secedeParticipateActivity(ActivityVolunteerRelation relation);
+
+    Result<?> proceedActivity(Activity activity);
+
+    Result<List<Activity>> infoProceedActivityForVolunteer();
 }

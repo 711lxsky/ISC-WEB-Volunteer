@@ -19,5 +19,7 @@ public interface ActivityMapper extends BaseMapper<Activity> {
 
     Integer updateActivityStatusById(@Param("activityId")Integer activityId,@Param("activityStatus")Integer activityStatus);
 
-    Integer updateActivityVolunteerNum(@Param("activityId") Integer activityId,@Param("activityVolunteerNum") Integer activityVolunteerNum);
+    Integer addActivityVolunteerNum(@Param("activityId") Integer activityId);
+
+    Integer reduceActivityVolunteerNum(@Param("activityId") Integer activityId);
 }

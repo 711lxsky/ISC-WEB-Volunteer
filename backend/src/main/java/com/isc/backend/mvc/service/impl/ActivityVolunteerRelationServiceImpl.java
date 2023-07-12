@@ -1,10 +1,22 @@
 package com.isc.backend.mvc.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.isc.backend.Util.JwtUtil;
+import com.isc.backend.Util.RequestUtil;
 import com.isc.backend.mvc.entity.ActivityVolunteerRelation;
+import com.isc.backend.mvc.entity.Volunteer;
 import com.isc.backend.mvc.mapper.ActivityVolunteerRelationMapper;
 import com.isc.backend.mvc.service.IActivityVolunteerRelationService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
@@ -17,8 +29,28 @@ import org.springframework.stereotype.Service;
 @Service
 public class ActivityVolunteerRelationServiceImpl extends ServiceImpl<ActivityVolunteerRelationMapper, ActivityVolunteerRelation> implements IActivityVolunteerRelationService {
 
+    @Resource
+    private JwtUtil jwtUtil;
+
+    @Resource
+    private RequestUtil requestUtil;
+
     @Override
     public Boolean addRelation(Integer activityId ,Integer volunteerId) {
         return this.baseMapper.addRelation(activityId,volunteerId);
+    }
+
+    @Override
+    public List<Integer> getActivityIdsOfVolunteer() {
+        Volunteer tokenVolunteer = jwtUtil.parseToken(requestUtil.getToken(),Volunteer.class);
+        return this.baseMapper.getActivityIds(tokenVolunteer.getId());
+    }
+
+    @Override
+    public boolean deleteRelation(Integer activityId, Integer volunteerId) {
+        LambdaQueryWrapper<ActivityVolunteerRelation>  wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ActivityVolunteerRelation::getActivityId,activityId)
+                .eq(ActivityVolunteerRelation::getVolunteerId,volunteerId);
+        return this.remove(wrapper);
     }
 }

@@ -94,4 +94,13 @@ public class VolunteerServiceImpl extends ServiceImpl<VolunteerMapper, Volunteer
     public Integer updateVolunteerActivityNum(Volunteer volunteer) {
         return this.baseMapper.updateActivityNumOfVolunteer(volunteer.getActivityCount(),volunteer.getId());
     }
+
+    @Override
+    public boolean reduceActivityNum(Integer volunteerId) {
+        int updateVolunteerNum = this.baseMapper.reduceActivityNumOfVolunteer(volunteerId);
+        if(updateVolunteerNum == 1){
+            return true;
+        }
+        return false;
+    }
 }

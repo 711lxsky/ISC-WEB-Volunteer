@@ -8,4 +8,10 @@
         values
             (#{activityId},#{VolunteerId})
     </insert>
+
+    <select id="getActivityIds" parameterType="integer" resultType="Integer">
+        select activity_id
+        from activity_volunteer_relation
+        where volunteer_id = #{volunteerId} and deleted = 0;
+    </select>
 </mapper>

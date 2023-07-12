@@ -5,17 +5,23 @@
     <select id="getVolunteerNumByName" parameterType="String" resultType="Integer">
         select count(*) as volunteerNum
         from volunteer
-        where name = #{volunteerName};
+        where name = #{volunteerName} and deleted = 0
     </select>
 
     <select id="getVolunteerNumByPhone" parameterType="String" resultType="Integer">
         select count(*) as volunteerNum
-        from volunteer where phone = #{volunteerPhone}
+        from volunteer where phone = #{volunteerPhone} and deleted = 0
     </select>
 
     <update id="updateActivityNumOfVolunteer" parameterType="integer">
         update volunteer
         set activity_count = #{activityNum}
-        where id = #{volunteerId}
+        where id = #{volunteerId} and deleted = 0
+    </update>
+
+    <update id="reduceActivityNumOfVolunteer" parameterType="integer">
+        update volunteer
+        set activity_count = activity_count - 1
+        where id = #{volunteerId} and deleted = 0
     </update>
 </mapper>

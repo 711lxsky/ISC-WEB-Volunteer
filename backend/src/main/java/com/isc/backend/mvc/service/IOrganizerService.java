@@ -19,4 +19,8 @@ public interface IOrganizerService extends IService<Organizer> {
     Result<?> addOrganizer(Organizer organizer);
 
     Result<Map<String, Object>> loginOrganizer(Organizer organizer);
+
+    boolean addActivityNumOfOrganizer(Integer organizerId);
+
+    boolean reduceActivityNumOfOrganizer(Integer organizerId);
 }

@@ -19,4 +19,6 @@ public interface VolunteerMapper extends BaseMapper<Volunteer> {
     Integer getVolunteerNumByPhone(String volunteerPhone);
 
     Integer updateActivityNumOfVolunteer(@Param("activityNum") Integer activityNum, @Param("volunteerId") Integer volunteerId);
+
+    Integer reduceActivityNumOfVolunteer(@Param("volunteerId") Integer volunteerId);
 }
