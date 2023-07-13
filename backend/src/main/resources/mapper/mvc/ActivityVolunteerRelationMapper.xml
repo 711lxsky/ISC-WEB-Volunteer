@@ -12,6 +12,13 @@
     <select id="getActivityIds" parameterType="integer" resultType="Integer">
         select activity_id
         from activity_volunteer_relation
-        where volunteer_id = #{volunteerId} and deleted = 0;
+        where volunteer_id = #{volunteerId} and deleted = 0
     </select>
+
+    <select id="getVolunteersForActivity" parameterType="integer" resultType="integer">
+        select volunteer_id
+        from activity_volunteer_relation
+        where activity_id = #{activityId} and deleted = 0
+    </select>
+
 </mapper>

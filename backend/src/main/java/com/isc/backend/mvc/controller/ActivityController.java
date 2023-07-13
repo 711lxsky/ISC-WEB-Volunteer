@@ -60,7 +60,7 @@ public class ActivityController {
     @ApiOperation("组织者活动召集/发布接口")
     @PutMapping("/update-convene")
     public Result<?> updateConveneActivity(@RequestBody Activity activity){
-        return activityService.updateConveneActivity(activity);
+        return activityService.updateConveneActivity(activity.getId());
     }
 
     @ApiOperation("取消活动接口")
@@ -95,10 +95,10 @@ public class ActivityController {
         return activityService.secedeParticipateActivity(relation);
     }
 
-    @ApiOperation("组织者将活动状态设置为进行中接口")
+    @ApiOperation("组织者将活动状态由召集中设置为进行中接口")
     @PutMapping("/proceed")
     public Result<?> proceedActivity(@RequestBody Activity activity){
-        return activityService.proceedActivity(activity);
+        return activityService.proceedActivity(activity.getId());
     }
 
     @ApiOperation("志愿者查询自身进行中的活动接口")
@@ -106,4 +106,17 @@ public class ActivityController {
     public Result<List<Activity>> infoProceedActivityForVolunteer(){
         return activityService.infoProceedActivityForVolunteer();
     }
+
+    @ApiOperation("组织者将活动状态由进行中修改为已完成接口")
+    @PutMapping("/finish")
+    public Result<?> finishActivity(@RequestBody Activity activity){
+        return activityService.finishActivity(activity.getId());
+    }
+
+    @ApiOperation("志愿者查询自身参与的已完成活动接口")
+    @GetMapping("/volunteer-info-finish")
+    public Result<List<Activity>> infoFinishActivityForVolunteer(){
+        return activityService.infoFinishActivityForVolunteer();
+    }
+
 }

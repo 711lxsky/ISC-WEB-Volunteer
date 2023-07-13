@@ -1,22 +1,17 @@
 package com.isc.backend.mvc.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.isc.backend.Util.JwtUtil;
-import com.isc.backend.Util.RequestUtil;
+import com.isc.backend.mvc.entity.Util.JwtUtil;
+import com.isc.backend.mvc.entity.Util.RequestUtil;
 import com.isc.backend.mvc.entity.ActivityVolunteerRelation;
 import com.isc.backend.mvc.entity.Volunteer;
 import com.isc.backend.mvc.mapper.ActivityVolunteerRelationMapper;
 import com.isc.backend.mvc.service.IActivityVolunteerRelationService;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * <p>
@@ -52,5 +47,10 @@ public class ActivityVolunteerRelationServiceImpl extends ServiceImpl<ActivityVo
         wrapper.eq(ActivityVolunteerRelation::getActivityId,activityId)
                 .eq(ActivityVolunteerRelation::getVolunteerId,volunteerId);
         return this.remove(wrapper);
+    }
+
+    @Override
+    public List<Integer> getVolunteersForActivity(Integer activityId) {
+        return this.baseMapper.getVolunteersForActivity(activityId);
     }
 }

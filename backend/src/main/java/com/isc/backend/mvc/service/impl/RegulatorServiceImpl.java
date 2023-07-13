@@ -1,7 +1,10 @@
 package com.isc.backend.mvc.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.isc.backend.Util.JwtUtil;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.isc.backend.mvc.entity.Password;
+import com.isc.backend.mvc.entity.Util.JwtUtil;
+import com.isc.backend.mvc.entity.Util.RequestUtil;
 import com.isc.backend.config.AvatarConfig;
 import com.isc.backend.mvc.entity.Regulator;
 import com.isc.backend.mvc.mapper.RegulatorMapper;
@@ -10,10 +13,14 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.isc.backend.setting.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * <p>
@@ -31,6 +38,9 @@ public class RegulatorServiceImpl extends ServiceImpl<RegulatorMapper, Regulator
 
     @Resource
     private JwtUtil jwtUtil;
+
+    @Resource
+    private RequestUtil requestUtil;
 
     @Resource
     private AvatarConfig avatarConfig;
@@ -80,5 +90,58 @@ public class RegulatorServiceImpl extends ServiceImpl<RegulatorMapper, Regulator
         else {
             return Result.fail(RCodeMessage.LoginFail.getCode(), RCodeMessage.LoginFail.getDescription()+":密码错误");
         }
+    }
+
+    @Override
+    public Result<?> logoutRegulator() {
+        return Result.success(RCodeMessage.LogoutSuccess.getCode(), "管理者"+RCodeMessage.LogoutSuccess.getDescription());
+    }
+
+    @Override
+    public Result<?> updateInfo(Regulator regulator) {
+        if(regulator.getName() != null && this.baseMapper.getRegulatorNumByName(regulator.getName()).equals(UserSetting.RepeatNameMax.getNum())){
+            return Result.fail(RCodeMessage.UpdateInfoFail.getCode(), RCodeMessage.UpdateInfoFail.getDescription()+":管理者名重复");
+        }
+        if(regulator.getPhone() != null && this.baseMapper.getRegulatorNumByPhone(regulator.getPhone()).equals(UserSetting.RepeatPhoneMax.getNum())){
+            return Result.fail(RCodeMessage.UpdateInfoFail.getCode(), RCodeMessage.UpdateInfoFail.getDescription()+":已达电话号码绑定用户上限");
+        }
+        UpdateWrapper<Regulator> wrapper = new UpdateWrapper<>();
+        wrapper.lambda().eq(Regulator::getId,regulator.getId());
+        if(this.baseMapper.update(regulator,wrapper) != 1){
+            return Result.fail(RCodeMessage.UpdateInfoFail.getCode(), RCodeMessage.UpdateInfoFail.getDescription()+":管理者数据异常");
+        }
+        return Result.success(RCodeMessage.UpdateInfoSuccess.getCode(), "管理者"+RCodeMessage.UpdateInfoSuccess.getDescription());
+    }
+
+    @Override
+    public Result<?> updateAvatar(MultipartFile avatar) {
+        String token = requestUtil.getToken();
+        Regulator tokenRegulator = jwtUtil.parseToken(token,Regulator.class);
+        String avtarNewName = UUID.randomUUID() + avatarConfig.getAvatarSuffix();
+        File newAvatar = new File(avatarConfig.getAvatarSavePath()+avtarNewName);
+        try {
+            avatar.transferTo(newAvatar);
+            if(this.baseMapper.updateAvatar(tokenRegulator.getId(),avtarNewName) != 1){
+                return Result.fail(RCodeMessage.UpdateAvatarFail.getCode(), RCodeMessage.UpdateAvatarFail.getDescription()+":管理者数据错误");
+            }
+            return Result.success(RCodeMessage.UpdateAvatarSuccess.getCode(), "管理者"+RCodeMessage.UpdateAvatarSuccess.getDescription());
+        }
+        catch (IOException ioException){
+            log.debug("头像文件写入磁盘失败");
+            return Result.fail(RCodeMessage.UpdateAvatarFail.getCode(), RCodeMessage.UpdateAvatarFail.getDescription()+"文件写入错误");
+        }
+    }
+
+    @Override
+    public Result<?> updatePassword(Password password) {
+        String token = requestUtil.getToken();
+        Regulator tokenRegulator = jwtUtil.parseToken(token,Regulator.class);
+        if(! passwordEncoder.matches(password.getOldPassword(),this.baseMapper.getPassword(tokenRegulator.getId()))){
+            return Result.fail(RCodeMessage.UpdatePasswordFail.getCode(),RCodeMessage.UpdatePasswordFail.getDescription()+":旧密码错误,身份校验未通过");
+        }
+        if(this.baseMapper.updatePassword(tokenRegulator.getId(),passwordEncoder.encode(password.getNewPassword())) != 1){
+            return Result.fail(RCodeMessage.UpdatePasswordFail.getCode(), RCodeMessage.UpdatePasswordFail.getDescription()+":管理者数据异常");
+        }
+        return Result.success(RCodeMessage.UpdatePasswordSuccess.getCode(), RCodeMessage.UpdatePasswordSuccess.getDescription());
     }
 }

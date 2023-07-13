@@ -30,7 +30,7 @@ public interface IActivityService extends IService<Activity> {
 
     Result<List<Activity>> infoActivityAll();
 
-    Result<?> updateConveneActivity(Activity activity);
+    Result<?> updateConveneActivity(Integer activityId);
 
     Result<?> updateCancelActivity(Activity activity);
 
@@ -40,7 +40,11 @@ public interface IActivityService extends IService<Activity> {
 
     Result<?> secedeParticipateActivity(ActivityVolunteerRelation relation);
 
-    Result<?> proceedActivity(Activity activity);
+    Result<?> proceedActivity(Integer activityId);
 
     Result<List<Activity>> infoProceedActivityForVolunteer();
+
+    Result<?> finishActivity(Integer activityId);
+
+    Result<List<Activity>> infoFinishActivityForVolunteer();
 }

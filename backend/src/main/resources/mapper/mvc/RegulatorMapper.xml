@@ -13,4 +13,22 @@
         from regulator
         where phone = #{regulatorPhone} and deleted = 0
     </select>
+
+    <update id="updateAvatar">
+        update regulator
+        set avatar = #{avatar}
+        where id = #{regulatorId} and deleted = 0
+    </update>
+
+    <select id="getPassword" parameterType="integer" resultType="string">
+        select password
+        from regulator
+        where id = #{volunteerId} and deleted = 0
+    </select>
+
+    <update id="updatePassword">
+        update regulator
+        set password = #{password}
+        where id = #{volunteerId} and deleted = 0
+    </update>
 </mapper>

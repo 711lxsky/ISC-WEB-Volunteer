@@ -19,4 +19,6 @@ public interface ActivityVolunteerRelationMapper extends BaseMapper<ActivityVolu
     Boolean addRelation(@Param("activityId") Integer activityId,@Param("VolunteerId") Integer volunteerId);
 
     List<Integer> getActivityIds(@Param("volunteerId") Integer volunteerId);
+
+    List<Integer> getVolunteersForActivity(@Param("activityId") Integer activityId);
 }

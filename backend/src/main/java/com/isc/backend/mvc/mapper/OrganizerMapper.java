@@ -21,4 +21,10 @@ public interface OrganizerMapper extends BaseMapper<Organizer> {
      Integer addActivityNum(@Param("organizerId") Integer organizerId);
 
      Integer reduceActivityNum(Integer organizerId);
+
+     Integer updateAvatar(@Param("organizerId") Integer organizerId, @Param("avatar") String avatar);
+
+     String getPassword(@Param("organizerId") Integer volunteerId);
+
+     Integer updatePassword(@Param("organizerId") Integer volunteerId,@Param("password") String password);
 }

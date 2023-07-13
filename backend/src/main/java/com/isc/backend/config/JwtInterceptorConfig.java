@@ -1,6 +1,6 @@
 package com.isc.backend.config;
 
-import com.isc.backend.Util.JwtValidateInterceptor;
+import com.isc.backend.mvc.entity.Util.JwtValidateInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -19,12 +19,16 @@ public class JwtInterceptorConfig implements WebMvcConfigurer {
         InterceptorRegistration registration = registry.addInterceptor(jwtValidateInterceptor);
         registration.addPathPatterns("/**")
                 .excludePathPatterns(
-                        "/user/add-volunteer",
-                        "/user/add-organizer",
-                        "/user/add-regulator",
-                        "/user/login-volunteer",
-                        "/user/login-organizer",
-                        "/user/login-regulator"
+                        "/avatar/**",
+                        "/volunteer/add",
+                        "/volunteer/login",
+                        "/volunteer/logout",
+                        "/organizer/add",
+                        "/organizer/login",
+                        "/organizer/logout",
+                        "/regulator/add",
+                        "/regulator/login",
+                        "/regulator/logout"
                 );
     }
 }

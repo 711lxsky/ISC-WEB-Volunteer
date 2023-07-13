@@ -21,4 +21,6 @@ public interface IActivityVolunteerRelationService extends IService<ActivityVolu
     List<Integer> getActivityIdsOfVolunteer();
 
     boolean deleteRelation(Integer activityId, Integer volunteerId);
+
+    List<Integer> getVolunteersForActivity(Integer activityId);
 }

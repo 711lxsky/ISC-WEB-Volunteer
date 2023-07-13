@@ -37,7 +37,19 @@ public enum RCodeMessage {
     ProceedActivitySuccess(2140,"修改活动状态为进行中成功"),
     ProceedActivityFail(2141,"修改活动状态为进行中失败"),
     InfoProceedActivitySuccess(2150,"志愿者查询进行中活动成功"),
-    InfoProceedActivityFail(2151,"志愿者查询进行中活动失败");
+    InfoProceedActivityFail(2151,"志愿者查询进行中活动失败"),
+    FinishActivitySuccess(2160,"修改活动状态为已完成成功"),
+    FinishActivityFail(2161,"修改活动状态为已完成失败"),
+    InfoFinishActivitySuccess(2170,"志愿者查询已完成活动成功"),
+    InfoFinishActivityFail(2171,"志愿者查询已完成活动失败"),
+    UpdateInfoSuccess(2180,"账号信息修改成功"),
+    UpdateInfoFail(2181,"账号信息修改失败"),
+    UpdateAvatarSuccess(2190,"修改头像成功"),
+    UpdateAvatarFail(2191,"修改头像失败"),
+    LogoutSuccess(2200,"账号退出登录成功"),
+    LogoutFail(2201,"账号退出登录失败"),
+    UpdatePasswordSuccess(2210,"修改密码成功"),
+    UpdatePasswordFail(2211,"修改密码失败");
 
 
     private final Integer code;

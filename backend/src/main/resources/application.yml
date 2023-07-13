@@ -6,6 +6,10 @@ spring:
     username: root
     password: zyy20031222
     url: jdbc:mysql:///iscweb
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
 
 logging:
   pattern:

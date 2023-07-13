@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.isc.backend.Util.JwtUtil;
-import com.isc.backend.Util.RequestUtil;
+import com.isc.backend.mvc.entity.Util.JwtUtil;
+import com.isc.backend.mvc.entity.Util.RequestUtil;
 import com.isc.backend.mvc.entity.Activity;
 import com.isc.backend.mvc.entity.ActivityVolunteerRelation;
 import com.isc.backend.mvc.entity.Organizer;
@@ -123,12 +123,12 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
     }
 
     @Override
-    public Result<?> updateConveneActivity(Activity activity) {
-        if(!activity.getStatus().equals(ActivitySetting.Passed.getCode())){
+    public Result<?> updateConveneActivity(Integer activityId) {
+        Activity activityGetFromDB = this.baseMapper.selectById(activityId);
+        if(!activityGetFromDB.getStatus().equals(ActivitySetting.Passed.getCode())){
             return Result.fail(RCodeMessage.ConveneActivityFail.getCode(), RCodeMessage.ConveneActivityFail.getDescription()+":当前活动非通过状态");
         }
-        activity.setStatus(ActivitySetting.Convening.getCode());
-        int updateDataNum = this.baseMapper.updateById(activity);
+        int updateDataNum = this.baseMapper.updateActivityStatusById(activityId,ActivitySetting.Convening.getCode());
         if(updateDataNum == 1){
             return Result.success(RCodeMessage.ConveneActivitySuccess.getCode(), RCodeMessage.ConveneActivitySuccess.getDescription());
         }
@@ -225,12 +225,15 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
     }
 
     @Override
-    public Result<?> proceedActivity(Activity activity) {
-        if(activity.getVolunteerCurrentNumber() < (activity.getVolunteerMin())){
+    public Result<?> proceedActivity(Integer activityId) {
+        Activity activityGetFromDB = this.baseMapper.selectById(activityId);
+        if(!activityGetFromDB.getStatus().equals(ActivitySetting.Convening.getCode())){
+            return Result.fail(RCodeMessage.ProceedActivityFail.getCode(), RCodeMessage.ProceedActivityFail.getDescription()+":当前活动状态非召集中");
+        }
+        if(activityGetFromDB.getVolunteerCurrentNumber() < (activityGetFromDB.getVolunteerMin())){
             return Result.fail(RCodeMessage.ProceedActivityFail.getCode(), RCodeMessage.ProceedActivityFail.getDescription()+":未达到最低目标人数");
         }
-
-        if(this.baseMapper.updateActivityStatusById(activity.getId(),ActivitySetting.Conducting.getCode()) != 1){
+        if(this.baseMapper.updateActivityStatusById(activityId,ActivitySetting.Conducting.getCode()) != 1){
             return Result.fail(RCodeMessage.ProceedActivityFail.getCode(), RCodeMessage.ProceedActivityFail.getDescription()+":活动数据异常");
         }
         return Result.success(RCodeMessage.ProceedActivitySuccess.getCode(), RCodeMessage.ProceedActivitySuccess.getDescription());
@@ -241,7 +244,6 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
         List<Integer> activityIds = activityVolunteerRelationService.getActivityIdsOfVolunteer();
         List<Activity> activities = new ArrayList<>();
         for(Integer activityId : activityIds){
-            System.out.println(activityId);
             LambdaQueryWrapper<Activity> wrapper = new LambdaQueryWrapper<>();
             wrapper.eq(Activity::getId,activityId)
                     .eq(Activity::getStatus,ActivitySetting.Conducting.getCode());
@@ -251,5 +253,40 @@ public class ActivityServiceImpl extends ServiceImpl<ActivityMapper, Activity> i
             }
         }
         return Result.success(RCodeMessage.InfoProceedActivitySuccess.getCode(), RCodeMessage.InfoProceedActivitySuccess.getDescription(),activities);
+    }
+
+    @Override
+    public Result<?> finishActivity(Integer activityId) {
+        Activity activity = this.baseMapper.selectById(activityId);
+        if(!activity.getStatus().equals(ActivitySetting.Conducting.getCode())){
+            return Result.fail(RCodeMessage.FinishActivityFail.getCode(), RCodeMessage.FinishActivityFail.getDescription()+":当前活动状态非进行中");
+        }
+        if(this.baseMapper.updateActivityStatusById(activityId,ActivitySetting.Finished.getCode()) != 1){
+            return Result.fail(RCodeMessage.FinishActivityFail.getCode(), RCodeMessage.FinishActivityFail.getDescription()+":志愿活动数据异常");
+        }
+        List<Integer> volunteers = activityVolunteerRelationService.getVolunteersForActivity(activityId);
+        if(volunteers == null){
+            return Result.fail(RCodeMessage.FinishActivityFail.getCode(), RCodeMessage.FinishActivityFail.getDescription()+":活动相关志愿者数据异常");
+        }
+        if(! volunteerService.updateScoreOfVolunteers(volunteers)){
+            return Result.fail(RCodeMessage.FinishActivityFail.getCode(), RCodeMessage.FinishActivityFail.getDescription()+":志愿者数据异常");
+        }
+        return Result.success(RCodeMessage.FinishActivitySuccess.getCode(), RCodeMessage.FinishActivitySuccess.getDescription());
+    }
+
+    @Override
+    public Result<List<Activity>> infoFinishActivityForVolunteer() {
+        List<Integer> activityIds = activityVolunteerRelationService.getActivityIdsOfVolunteer();
+        List<Activity> activities = new ArrayList<>();
+        for(Integer activityId : activityIds){
+            LambdaQueryWrapper<Activity> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(Activity::getId,activityId)
+                    .eq(Activity::getStatus,ActivitySetting.Finished.getCode());
+            Activity activity = this.baseMapper.selectOne(wrapper);
+            if(activity != null){
+                activities.add(activity);
+            }
+        }
+        return Result.success(RCodeMessage.InfoFinishActivitySuccess.getCode(), RCodeMessage.InfoFinishActivitySuccess.getDescription(),activities);
     }
 }

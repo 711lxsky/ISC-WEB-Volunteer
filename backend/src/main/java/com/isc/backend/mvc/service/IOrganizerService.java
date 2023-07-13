@@ -2,7 +2,9 @@ package com.isc.backend.mvc.service;
 
 import com.isc.backend.mvc.entity.Organizer;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.isc.backend.mvc.entity.Password;
 import com.isc.backend.setting.Result;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -23,4 +25,12 @@ public interface IOrganizerService extends IService<Organizer> {
     boolean addActivityNumOfOrganizer(Integer organizerId);
 
     boolean reduceActivityNumOfOrganizer(Integer organizerId);
+
+    Result<?> logoutOrganizer();
+
+    Result<?> updateInfo(Organizer organizer);
+
+    Result<?> updateAvatar(MultipartFile avatar);
+
+    Result<?> updatePassword(Password password);
 }

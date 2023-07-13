@@ -1,4 +1,4 @@
-package com.isc.backend.Util;
+package com.isc.backend.mvc.entity.Util;
 
 import com.alibaba.fastjson2.JSON;
 import com.isc.backend.setting.RCodeMessage;

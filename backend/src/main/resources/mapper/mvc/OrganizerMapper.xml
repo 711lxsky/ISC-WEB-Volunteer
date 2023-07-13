@@ -25,4 +25,22 @@
         set current_activity_number = current_activity_number - 1
         where id = #{organizerId} and deleted = 0
     </update>
+
+    <update id="updateAvatar">
+        update organizer
+        set avatar = #{avatar}
+        where id = #{organizerId} and deleted = 0
+    </update>
+
+    <select id="getPassword" parameterType="integer" resultType="string">
+        select password
+        from organizer
+        where id = #{organizerId} and deleted = 0
+    </select>
+
+    <update id="updatePassword">
+        update organizer
+        set password = #{password}
+        where id = #{organizerId} and deleted = 0
+    </update>
 </mapper>

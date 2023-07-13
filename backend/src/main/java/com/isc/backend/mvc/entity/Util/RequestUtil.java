@@ -1,4 +1,4 @@
-package com.isc.backend.Util;
+package com.isc.backend.mvc.entity.Util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,5 +19,9 @@ public class RequestUtil {
     public String getToken(){
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         return request.getHeader(jwtUtil.getTokenName());
+    }
+
+    public HttpServletRequest getRequest(){
+        return ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
     }
 }

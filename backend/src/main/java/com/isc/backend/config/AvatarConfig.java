@@ -8,6 +8,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class AvatarConfig implements WebMvcConfigurer {
+
+    @Value("${avatar-suffix}")
+    private String avatarSuffix;
+
     @Value("${avatar-save-path}")
     private String avatarSavePath;
 
@@ -22,6 +26,14 @@ public class AvatarConfig implements WebMvcConfigurer {
 
     @Value("${avatar-server-path}")
     private String avatarServer;
+
+    public String getAvatarSavePath() {
+        return avatarSavePath;
+    }
+
+    public String getAvatarSuffix() {
+        return avatarSuffix;
+    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
