@@ -32,6 +32,4 @@
         where id = #{activityId} and deleted = 0
     </update>
 
-
-
 </mapper>

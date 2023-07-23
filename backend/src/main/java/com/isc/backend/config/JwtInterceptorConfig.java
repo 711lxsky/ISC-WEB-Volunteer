@@ -1,6 +1,6 @@
 package com.isc.backend.config;
 
-import com.isc.backend.mvc.entity.Util.JwtValidateInterceptor;
+import com.isc.backend.Util.JwtValidateInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

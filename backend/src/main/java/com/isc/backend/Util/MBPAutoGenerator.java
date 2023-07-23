@@ -1,4 +1,4 @@
-package com.isc.backend.mvc.entity.Util;
+package com.isc.backend.Util;
 
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;

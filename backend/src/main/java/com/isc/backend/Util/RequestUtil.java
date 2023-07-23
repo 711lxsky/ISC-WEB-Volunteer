@@ -1,4 +1,4 @@
-package com.isc.backend.mvc.entity.Util;
+package com.isc.backend.Util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

@@ -2,8 +2,8 @@ package com.isc.backend.mvc.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.isc.backend.mvc.entity.Util.JwtUtil;
-import com.isc.backend.mvc.entity.Util.RequestUtil;
+import com.isc.backend.Util.JwtUtil;
+import com.isc.backend.Util.RequestUtil;
 import com.isc.backend.mvc.entity.ActivityVolunteerRelation;
 import com.isc.backend.mvc.entity.Volunteer;
 import com.isc.backend.mvc.mapper.ActivityVolunteerRelationMapper;
