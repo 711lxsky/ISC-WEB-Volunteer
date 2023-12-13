@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isc.backend.mvc.mapper.RegulatorMapper">
+
+    <select id="getRegulatorNumByName" parameterType="String" resultType="Integer">
+        select count(*) as regulatorNum
+        from regulator
+        where name = #{regulatorName} and deleted = 0
+    </select>
+
+    <select id="getRegulatorNumByPhone" parameterType="String" resultType="Integer">
+        select count(*) as regulatorNum
+        from regulator
+        where phone = #{regulatorPhone} and deleted = 0
+    </select>
+
+    <update id="updateAvatar">
+        update regulator
+        set avatar = #{avatar}
+        where id = #{regulatorId} and deleted = 0
+    </update>
+
+    <select id="getPassword" parameterType="integer" resultType="string">
+        select password
+        from regulator
+        where id = #{volunteerId} and deleted = 0
+    </select>
+
+    <update id="updatePassword">
+        update regulator
+        set password = #{password}
+        where id = #{volunteerId} and deleted = 0
+    </update>
+</mapper>

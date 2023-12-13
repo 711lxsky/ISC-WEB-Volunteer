@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isc.backend.mvc.mapper.OrganizerMapper">
+
+    <select id="getOrganizerNumByName" parameterType="String" resultType="Integer">
+        select count(*) as organizerNum
+        from organizer
+        where name = #{organizerName} and deleted = 0
+    </select>
+
+    <select id="getOrganizerNumByPhone" parameterType="String" resultType="Integer">
+        select count(*) as organizerNum
+        from organizer
+        where phone = #{organizerPhone} and deleted = 0
+    </select>
+
+    <update id="addActivityNum" parameterType="integer">
+        update organizer
+        set current_activity_number = current_activity_number + 1
+        where id = #{organizerId} and deleted = 0
+    </update>
+
+    <update id="reduceActivityNum" parameterType="integer">
+        update organzier
+        set current_activity_number = current_activity_number - 1
+        where id = #{organizerId} and deleted = 0
+    </update>
+
+    <update id="updateAvatar">
+        update organizer
+        set avatar = #{avatar}
+        where id = #{organizerId} and deleted = 0
+    </update>
+
+    <select id="getPassword" parameterType="integer" resultType="string">
+        select password
+        from organizer
+        where id = #{organizerId} and deleted = 0
+    </select>
+
+    <update id="updatePassword">
+        update organizer
+        set password = #{password}
+        where id = #{organizerId} and deleted = 0
+    </update>
+</mapper>

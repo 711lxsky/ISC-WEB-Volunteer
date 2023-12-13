@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isc.backend.mvc.mapper.ActivityMapper">
+
+    <select id="getApplyActivityNumOfOrganizer" parameterType="Integer" resultType="Integer">
+        select count(*) as activityNum
+        from activity
+        where organizer_id = #{organizerId} and status = #{activityStatus} and deleted = 0
+    </select>
+
+    <select id="getActivityNumByNameAndTheme" parameterType="String" resultType="Integer">
+        select count(*) as activityNum
+        from activity
+        where name = #{activityName} and theme = #{activityTheme} and deleted = 0
+    </select>
+
+    <update id="updateActivityStatusById" parameterType="Integer" >
+        update activity
+        set status = #{activityStatus}
+        where id = #{activityId} and deleted = 0
+    </update>
+
+    <update id="addActivityVolunteerNum" parameterType="Integer">
+        update activity
+        set volunteer_current_number = volunteer_current_number + 1
+        where id = #{activityId} and deleted = 0
+    </update>
+
+    <update id="reduceActivityVolunteerNum" parameterType="integer">
+        update activity
+        set volunteer_current_number = volunteer_current_number - 1
+        where id = #{activityId} and deleted = 0
+    </update>
+
+</mapper>

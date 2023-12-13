@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isc.backend.mvc.mapper.ActivityVolunteerRelationMapper">
+
+    <insert id="addRelation" parameterType="integer" >
+        insert into activity_volunteer_relation
+            (activity_id,volunteer_id)
+        values
+            (#{activityId},#{VolunteerId})
+    </insert>
+
+    <select id="getActivityIds" parameterType="integer" resultType="Integer">
+        select activity_id
+        from activity_volunteer_relation
+        where volunteer_id = #{volunteerId} and deleted = 0
+    </select>
+
+    <select id="getVolunteersForActivity" parameterType="integer" resultType="integer">
+        select volunteer_id
+        from activity_volunteer_relation
+        where activity_id = #{activityId} and deleted = 0
+    </select>
+
+</mapper>

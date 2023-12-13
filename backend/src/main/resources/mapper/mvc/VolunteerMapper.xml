@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isc.backend.mvc.mapper.VolunteerMapper">
+
+    <select id="getVolunteerNumByName" parameterType="String" resultType="Integer">
+        select count(*) as volunteerNum
+        from volunteer
+        where name = #{volunteerName} and deleted = 0
+    </select>
+
+    <select id="getVolunteerNumByPhone" parameterType="String" resultType="Integer">
+        select count(*) as volunteerNum
+        from volunteer where phone = #{volunteerPhone} and deleted = 0
+    </select>
+
+    <update id="updateActivityNumOfVolunteer" parameterType="integer">
+        update volunteer
+        set activity_count = #{activityNum}
+        where id = #{volunteerId} and deleted = 0
+    </update>
+
+    <update id="reduceActivityNumOfVolunteer" parameterType="integer">
+        update volunteer
+        set activity_count = activity_count - 1
+        where id = #{volunteerId} and deleted = 0
+    </update>
+
+    <update id="updateScoreOfVolunteer" parameterType="integer">
+        update volunteer
+        set score = score + 1
+        where id = #{volunteerId} and deleted = 0
+    </update>
+
+    <update id="updateAvatarOfVolunteer" >
+        update volunteer
+        set avatar = #{avatar}
+        where id = #{volunteerId} and deleted = 0
+    </update>
+
+    <select id="getPassword" parameterType="integer" resultType="string">
+        select password
+        from volunteer
+        where id = #{volunteerId} and deleted = 0
+    </select>
+
+    <update id="updatePassword">
+        update volunteer
+        set password = #{password}
+        where id = #{volunteerId} and deleted = 0
+    </update>
+</mapper>
