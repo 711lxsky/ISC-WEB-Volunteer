@@ -1,0 +1,30 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="JavadocDeclaration" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ADDITIONAL_TAGS" value="description,createDate,Entity,TableName,Author:,Date:,date" />
+    </inspection_tool>
+    <inspection_tool class="VulnerableLibrariesLocal" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="isIgnoringEnabled" value="true" />
+      <option name="ignoredModules">
+        <list>
+          <option value="BackStage" />
+          <option value="BackStage" />
+        </list>
+      </option>
+      <option name="ignoredPackages">
+        <list>
+          <option value="com.baomidou:mybatis-plus-extension:3.5.3" />
+          <option value="org.springframework.boot:spring-boot-autoconfigure:3.0.0" />
+        </list>
+      </option>
+      <option name="ignoredReasons">
+        <list>
+          <option value="进行中" />
+          <option value="进行中" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

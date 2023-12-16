@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.isc.backstage.mapper.RolePermissionMapper">
+
+    <resultMap id="BaseResultMap" type="com.isc.backstage.entity.RolePermission">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="role_id" column="role_id" jdbcType="BIGINT"/>
+            <result property="permission_id" column="permission_id" jdbcType="BIGINT"/>
+            <result property="created" column="created" jdbcType="TIMESTAMP"/>
+            <result property="creator" column="creator" jdbcType="VARCHAR"/>
+            <result property="edited" column="edited" jdbcType="TIMESTAMP"/>
+            <result property="editor" column="editor" jdbcType="VARCHAR"/>
+            <result property="deleted" column="deleted" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,role_id,permission_id,
+        created,creator,edited,
+        editor,deleted
+    </sql>
+</mapper>
