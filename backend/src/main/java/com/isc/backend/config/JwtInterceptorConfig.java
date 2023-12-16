@@ -17,18 +17,20 @@ public class JwtInterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         InterceptorRegistration registration = registry.addInterceptor(jwtValidateInterceptor);
-        registration.addPathPatterns("/**")
-                .excludePathPatterns(
-                        "/avatar/**",
-                        "/volunteer/add",
-                        "/volunteer/login",
-                        "/volunteer/logout",
-                        "/organizer/add",
-                        "/organizer/login",
-                        "/organizer/logout",
-                        "/regulator/add",
-                        "/regulator/login",
-                        "/regulator/logout"
-                );
+//        registration.addPathPatterns("/**")
+//                .excludePathPatterns(
+//                        "/avatar/**",
+//                        "/volunteer/add",
+//                        "/volunteer/login",
+//                        "/volunteer/logout",
+//                        "/organizer/add",
+//                        "/organizer/login",
+//                        "/organizer/logout",
+//                        "/regulator/add",
+//                        "/regulator/login",
+//                        "/regulator/logout",
+//                        "/test/**"
+//                );
+        registration.excludePathPatterns("/**");
     }
 }

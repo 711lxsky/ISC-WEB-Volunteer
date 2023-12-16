@@ -2,10 +2,21 @@ server:
   port: 8888
 
 spring:
+  banner:
+    charset: UTF-8
+    location: classpath:banner.txt
+
   datasource:
     username: root
     password: zyy20031222
-    url: jdbc:mysql:///iscweb
+    url: jdbc:mysql:///isc_volunteer, 
+          jdbc:mysql:///sg_security
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    password: zyy7112003.
+
   servlet:
     multipart:
       max-file-size: 10MB
