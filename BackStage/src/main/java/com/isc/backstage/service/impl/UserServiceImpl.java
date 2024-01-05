@@ -1,24 +1,23 @@
 package com.isc.backstage.service.impl;
 
-import cn.hutool.jwt.JWTUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.isc.backstage.Util.RedisUtil;
-import com.isc.backstage.domain.DTO.LoginUserDTO;
 import com.isc.backstage.domain.LoginUser;
-import com.isc.backstage.domain.Result;
-import com.isc.backstage.domain.VO.TokenVO;
+import com.isc.backstage.entity.Permission;
+import com.isc.backstage.entity.Role;
 import com.isc.backstage.entity.User;
-import com.isc.backstage.service.UserService;
 import com.isc.backstage.mapper.UserMapper;
+import com.isc.backstage.service.PermissionService;
+import com.isc.backstage.service.RoleService;
+import com.isc.backstage.service.UserService;
 import jakarta.annotation.Resource;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -31,19 +30,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     implements UserService, UserDetailsService {
 
     @Resource
-    private RedisUtil redisUtil;
+    private RoleService roleService;
 
     @Resource
-    private AuthenticationManager authenticationManager;
+    private PermissionService permissionService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = this.getUserByUsername(username);
-        return LoginUser.builder()
-                .userid(user.getId())
-                .username(user.getName())
-                .password(user.getPassword())
-                .build();
+        List<Role> roles = roleService.getRolesForUser(user.getId());
+        List<Long> roleIds = new ArrayList<>();
+        roles.forEach(i -> roleIds.add(i.getId()));
+        List<Permission> permissions = permissionService.getPermissionsByRoleIds(roleIds);
+        return new LoginUser(user, roles, permissions);
     }
 
     public User getUserByUsername(String username){
@@ -53,14 +52,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return optionalUser.orElseThrow(() -> new UsernameNotFoundException("抱歉，用户不存在"));
     }
 
-    @Override
-    public Result<?> login(LoginUserDTO dto) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword())
-        );
-        User user = this.getUserByUsername(dto.getUsername());
-
-    }
 }
 
 

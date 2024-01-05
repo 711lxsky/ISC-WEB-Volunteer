@@ -5,12 +5,14 @@ package com.isc.backstage.domain.VO;
  * @Date: 2023-12-16
  */
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class TokenVO {
 
-    private String tokenName;
+    private String AccessToken;
 
-    private String tokenValue;
+    private String RefreshToken;
 }

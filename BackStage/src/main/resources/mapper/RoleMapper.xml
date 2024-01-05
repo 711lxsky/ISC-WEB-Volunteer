@@ -6,7 +6,7 @@
 
     <resultMap id="BaseResultMap" type="com.isc.backstage.entity.Role">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="parent_id" column="parent_id" jdbcType="BIGINT"/>
+            <result property="parentId" column="parent_id" jdbcType="BIGINT"/>
             <result property="code" column="code" jdbcType="VARCHAR"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
             <result property="intro" column="intro" jdbcType="VARCHAR"/>
@@ -23,4 +23,23 @@
         creator,edited,editor,
         deleted
     </sql>
+
+    <select id="getRolesForUserById" resultType="com.isc.backstage.entity.Role">
+        select
+            r.id,
+            r.parent_id,
+            r.code,
+            r.name,
+            r.intro,
+            r.created,
+            r.creator,
+            r.edited,
+            r.editor,
+            r.deleted
+            from role as r
+                join user_role as ur on r.id = ur.role_id
+                join user as u on u.id = ur.user_id
+        where u.id = #{userid}
+
+    </select>
 </mapper>

@@ -4,11 +4,11 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 权限
@@ -27,7 +27,7 @@ public class Permission implements Serializable {
      * 所属父级权限ID
      */
     @TableField(value = "parent_id")
-    private Long parent_id;
+    private Long parentId;
 
     /**
      * 权限唯一CODE代码

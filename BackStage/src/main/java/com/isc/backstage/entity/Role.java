@@ -4,9 +4,11 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 角色
@@ -25,7 +27,7 @@ public class Role implements Serializable {
      * 所属父级角色ID
      */
     @TableField(value = "parent_id")
-    private Long parent_id;
+    private Long parentId;
 
     /**
      * 角色唯一CODE代码
@@ -75,6 +77,7 @@ public class Role implements Serializable {
     @TableField(value = "deleted")
     private Integer deleted;
 
+    @Serial
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

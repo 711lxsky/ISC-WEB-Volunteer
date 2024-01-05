@@ -1,6 +1,6 @@
 import { parseTime } from '@/utils/index.js'
 
-describe('Utils:parseTime', () => {
+describe('utils:parseTime', () => {
   const d = new Date('2018-07-13 17:54:01') // "2018-07-13 17:54:01"
   it('timestamp', () => {
     expect(parseTime(d)).toBe('2018-07-13 17:54:01')

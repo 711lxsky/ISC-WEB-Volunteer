@@ -3,7 +3,10 @@ package com.isc.backstage.mapper;
 import com.isc.backstage.entity.Role;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
 * @author zyy
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RoleMapper extends BaseMapper<Role> {
 
+    List<Role> getRolesForUserById(@Param("userid") Long userid);
 }
 
 

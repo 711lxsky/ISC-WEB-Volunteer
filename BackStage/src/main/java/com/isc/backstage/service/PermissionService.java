@@ -3,6 +3,8 @@ package com.isc.backstage.service;
 import com.isc.backstage.entity.Permission;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
 * @author zyy
 * @description 针对表【permission(权限)】的数据库操作Service
@@ -10,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface PermissionService extends IService<Permission> {
 
+    List<Permission> getPermissionsByRoleIds(List<Long> roleIds);
 }

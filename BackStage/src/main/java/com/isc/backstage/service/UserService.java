@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface UserService extends IService<User> {
 
-    Result<?> login(LoginUserDTO dto);
+    User getUserByUsername(String username);
 }

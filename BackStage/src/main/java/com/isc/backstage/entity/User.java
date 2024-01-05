@@ -4,11 +4,11 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 用户
@@ -39,7 +39,7 @@ public class User implements Serializable {
      * 头像图片地址
      */
     @TableField(value = "head_img_url")
-    private String head_img_url;
+    private String headImgUrl;
 
     /**
      * 手机号码

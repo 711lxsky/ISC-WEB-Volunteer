@@ -3,6 +3,8 @@ package com.isc.backstage.service;
 import com.isc.backstage.entity.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
 * @author zyy
 * @description 针对表【role(角色)】的数据库操作Service
@@ -10,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface RoleService extends IService<Role> {
 
+    List<Role> getRolesForUser(Long userid);
 }

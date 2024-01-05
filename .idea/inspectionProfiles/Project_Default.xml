@@ -3,7 +3,7 @@
     <option name="myName" value="Project Default" />
     <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="JavadocDeclaration" enabled="true" level="WARNING" enabled_by_default="true">
-      <option name="ADDITIONAL_TAGS" value="description,createDate,Entity,TableName,Author:,Date:,date" />
+      <option name="ADDITIONAL_TAGS" value="description,createDate,Entity,TableName,Author:,Date:,date,Description:,Param:,Return:" />
     </inspection_tool>
     <inspection_tool class="VulnerableLibrariesLocal" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="isIgnoringEnabled" value="true" />

@@ -6,7 +6,7 @@
 
     <resultMap id="BaseResultMap" type="com.isc.backstage.entity.Permission">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="parent_id" column="parent_id" jdbcType="BIGINT"/>
+            <result property="parentId" column="parent_id" jdbcType="BIGINT"/>
             <result property="code" column="code" jdbcType="VARCHAR"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
             <result property="intro" column="intro" jdbcType="VARCHAR"/>
@@ -25,4 +25,14 @@
         uri,created,creator,
         edited,editor,deleted
     </sql>
+
+    <select id="getPermissionsByRoleIds" resultType="com.isc.backstage.entity.Permission">
+        select
+            from permission as p
+                join role_permission as rp on p.id = rp.permission_id
+        where rp.role_id in
+        <foreach collection="roleIds" item="roleId" index="index" open="(" separator="," close=")">
+            #{roleIds}
+        </foreach>
+    </select>
 </mapper>

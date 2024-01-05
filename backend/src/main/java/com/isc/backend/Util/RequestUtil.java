@@ -1,5 +1,7 @@
 package com.isc.backend.Util;
 
+//ess_token可能会被发送到多个服务器，到处抛头露面。refresh_token仅仅是客户端和认证服务器进行交付。客户端不会将refresh_token发送给其它服务器。
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
