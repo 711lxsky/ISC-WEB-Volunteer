@@ -27,7 +27,7 @@ public class LogoutHandler implements org.springframework.security.web.authentic
 
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        String accessToken = requestUtil.getTokenFromRequest(request, response);
+        String accessToken = requestUtil.getTokenFromRequest(request);
         if(! ( jwtUtil.removeAccessTokenInRedis(accessToken) && jwtUtil.putAccessTokenIntoBlackList(accessToken))){
             throw new RuntimeException(CodeAndMessage.INTERNAL_SERVER_ERROR.getZhDescription());
         }

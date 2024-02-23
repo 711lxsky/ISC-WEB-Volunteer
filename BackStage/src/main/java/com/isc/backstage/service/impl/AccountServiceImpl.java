@@ -1,5 +1,6 @@
 package com.isc.backstage.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.isc.backstage.entity.Account;
 import com.isc.backstage.service.AccountService;
@@ -15,6 +16,18 @@ import org.springframework.stereotype.Service;
 public class AccountServiceImpl extends ServiceImpl<AccountMapper, Account>
     implements AccountService{
 
+    @Override
+    public boolean addAccountInfo(Account newAccountInfo) {
+        return this.save(newAccountInfo);
+    }
+
+    @Override
+    public Account getAccountInfoByAccountAndType(Integer accountCategory, String loginAccount) {
+        LambdaQueryWrapper<Account> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Account::getCategory, accountCategory);
+        wrapper.eq(Account::getOpenCode, loginAccount);
+        return this.baseMapper.selectOne(wrapper);
+    }
 }
 
 

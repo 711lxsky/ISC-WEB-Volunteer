@@ -12,7 +12,8 @@ import lombok.Getter;
 public enum UserSetting {
 
     DisEnabled(1, "stop", "禁用状态"),
-    Enabled(0, "ok", "正常");
+    Enabled(0, "ok", "正常"),
+    UserSaltLength(8, "get a salt length for the user", "拿到一个用户加密盐值长度");
 
     private final Integer Code;
 

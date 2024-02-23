@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * @Author: 711lxsky
@@ -15,9 +16,11 @@ import java.util.Calendar;
 @Getter
 public class DateUtil {
 
-    public Calendar getCurrentTime(){
+    public Calendar getCurrentTimeForCalendar(){
         return Calendar.getInstance();
     }
 
-
+    public Date getCurrentTimeForDate(){
+        return cn.hutool.core.date.DateUtil.date(Calendar.getInstance());
+    }
 }

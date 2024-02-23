@@ -1,12 +1,17 @@
 package com.isc.backstage.entity;
 
+import cn.hutool.core.date.DateTime;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 用户角色
@@ -14,6 +19,8 @@ import lombok.Data;
  */
 @TableName(value ="user_role")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserRole implements Serializable {
     /**
      * ID
@@ -63,6 +70,14 @@ public class UserRole implements Serializable {
     @TableField(value = "deleted")
     private Integer deleted;
 
+    @Serial
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
+
+    public UserRole(Long userId, Long roleId, DateTime created, String creator) {
+        this.user_id = userId;
+        this.role_id = roleId;
+        this.created = created;
+        this.creator = creator;
+    }
 }

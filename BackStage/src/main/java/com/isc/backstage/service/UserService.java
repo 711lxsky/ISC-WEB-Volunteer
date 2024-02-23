@@ -1,9 +1,10 @@
 package com.isc.backstage.service;
 
-import com.isc.backstage.domain.DTO.LoginUserDTO;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.isc.backstage.domain.Result;
 import com.isc.backstage.entity.User;
-import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
 * @author zyy
@@ -12,5 +13,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface UserService extends IService<User> {
 
+    User getUserInfoById(Long userId);
+
     User getUserByUsername(String username);
+
+    Result<?> updateUserAvatar(MultipartFile newAvatarFile);
+
+    void saveUserDetailsIntoRedisWithUserId(String userId);
+
+    UserDetails getUserDetailsFromRedisWithUserId(String userId);
 }

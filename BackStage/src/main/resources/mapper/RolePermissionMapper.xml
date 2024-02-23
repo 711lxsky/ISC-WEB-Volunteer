@@ -6,8 +6,8 @@
 
     <resultMap id="BaseResultMap" type="com.isc.backstage.entity.RolePermission">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="role_id" column="role_id" jdbcType="BIGINT"/>
-            <result property="permission_id" column="permission_id" jdbcType="BIGINT"/>
+            <result property="roleId" column="role_id" jdbcType="BIGINT"/>
+            <result property="permissionId" column="permission_id" jdbcType="BIGINT"/>
             <result property="created" column="created" jdbcType="TIMESTAMP"/>
             <result property="creator" column="creator" jdbcType="VARCHAR"/>
             <result property="edited" column="edited" jdbcType="TIMESTAMP"/>

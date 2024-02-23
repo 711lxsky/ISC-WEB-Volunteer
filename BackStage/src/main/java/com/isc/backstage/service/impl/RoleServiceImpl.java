@@ -1,9 +1,10 @@
 package com.isc.backstage.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.isc.backstage.service.RoleService;
+import com.isc.backstage.Exception.DataErrorException;
 import com.isc.backstage.entity.Role;
 import com.isc.backstage.mapper.RoleMapper;
+import com.isc.backstage.service.RoleService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +18,23 @@ import java.util.List;
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role>
     implements RoleService {
 
+
+
     @Override
     public List<Role> getRolesForUser(Long userid) {
         return this.baseMapper.getRolesForUserById(userid);
+    }
+
+    @Override
+    public Long getRoleIdForOneRole(String roleName) throws DataErrorException {
+        return this.baseMapper.getRoleIdForOneRoleName(roleName);
+
+
+    }
+
+    @Override
+    public Role getRoleByUserId(Long id) {
+        return this.baseMapper.getRoleByUserId(id);
     }
 }
 

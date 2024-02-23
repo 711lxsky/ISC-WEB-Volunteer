@@ -18,6 +18,7 @@ public enum CodeAndMessage {
     DELETED(3, "Deleted", "删除成功"),
 
     INTERNAL_SERVER_ERROR(9999, "Internal Server Error", "服务器未知错误"),
+    MYSQL_ERROR(9998, "DateBase Mysql has some error" , "Mysql数据库错误"),
 
     UN_AUTHENTICATION(401, "Authentication Failed", "认证失败"),
     CANT_SIGN_OR_ENCRYPT(10011, "Can't sign or encrypt for the jwt", "无法对JWT签名或加密"),

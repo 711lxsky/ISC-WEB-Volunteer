@@ -28,11 +28,42 @@
 
     <select id="getPermissionsByRoleIds" resultType="com.isc.backstage.entity.Permission">
         select
+            p.id,
+            p.parent_id,
+            p.code,
+            p.name,
+            p.intro,
+            p.category,
+            p.uri,
+            p.created,
+            p.creator,
+            p.edited,
+            p.editor,
+            p.deleted
             from permission as p
                 join role_permission as rp on p.id = rp.permission_id
         where rp.role_id in
         <foreach collection="roleIds" item="roleId" index="index" open="(" separator="," close=")">
             #{roleIds}
         </foreach>
+    </select>
+
+    <select id="getPermissionsByRoleId" resultType="com.isc.backstage.entity.Permission">
+        select
+            p.id,
+            p.parent_id,
+            p.code,
+            p.name,
+            p.intro,
+            p.category,
+            p.uri,
+            p.created,
+            p.creator,
+            p.edited,
+            p.editor,
+            p.deleted
+        from permission as p
+                 left join role_permission as rp on p.id = rp.permission_id
+        where role_id = #{roleId}
     </select>
 </mapper>

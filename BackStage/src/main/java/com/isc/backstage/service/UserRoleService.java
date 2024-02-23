@@ -10,4 +10,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface UserRoleService extends IService<UserRole> {
 
+    boolean addUserAndRoleInfo(UserRole newUserRoleInfo);
 }

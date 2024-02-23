@@ -10,4 +10,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface AccountService extends IService<Account> {
 
+    boolean addAccountInfo(Account newAccountInfo);
+
+    Account getAccountInfoByAccountAndType(Integer accountCategory, String loginAccount);
 }

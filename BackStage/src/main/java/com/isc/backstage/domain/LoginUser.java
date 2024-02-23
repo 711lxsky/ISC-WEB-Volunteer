@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @Builder
 public class LoginUser extends User implements UserDetails {
 
-    private List<Role> roleList;
+    private Role role;
 
     private List<Permission> permissionList;
 
@@ -44,12 +44,21 @@ public class LoginUser extends User implements UserDetails {
     public LoginUser(User user, List<Permission> permissions) {
         BeanUtils.copyProperties(user, this);
         this.permissionList = permissions;
+        this.authorities = permissionList.stream()
+                .filter(permission -> StringUtils.hasText(permission.getName()))
+                .map(permission -> new SimpleGrantedAuthority(permission.getName()))
+                .collect(Collectors.toList());
     }
 
-    public LoginUser(User user, List<Role> roles, List<Permission> permissions) {
+    public LoginUser(User user, Role role, List<Permission> permissions) {
         BeanUtils.copyProperties(user, this);
-        this.roleList = roles;
+        this.role = role;
         this.permissionList = permissions;
+        this.authorities = permissionList.stream()
+                .filter(permission -> StringUtils.hasText(permission.getName()))
+                .map(permission -> new SimpleGrantedAuthority(permission.getName()))
+                .collect(Collectors.toList());
+        this.authorities.add(new SimpleGrantedAuthority(role.getName()));
     }
 
     /**
@@ -57,13 +66,15 @@ public class LoginUser extends User implements UserDetails {
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(Objects.nonNull(authorities)){
-            return authorities;
+        if(Objects.nonNull(this.authorities)){
+            return this.authorities;
         }
-        return permissionList.stream()
+        this.authorities = this.permissionList.stream()
                 .filter(permission -> StringUtils.hasText(permission.getName()))
                 .map(permission -> new SimpleGrantedAuthority(permission.getName()))
                 .collect(Collectors.toList());
+        authorities.add(new SimpleGrantedAuthority(this.role.getName()));
+        return this.authorities;
     }
 
     @Override

@@ -4,9 +4,13 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 角色权限
@@ -14,6 +18,8 @@ import lombok.Data;
  */
 @TableName(value ="role_permission")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RolePermission implements Serializable {
     /**
      * ID
@@ -25,13 +31,13 @@ public class RolePermission implements Serializable {
      * 角色ID
      */
     @TableField(value = "role_id")
-    private Long role_id;
+    private Long roleId;
 
     /**
      * 权限ID
      */
     @TableField(value = "permission_id")
-    private Long permission_id;
+    private Long permissionId;
 
     /**
      * 创建时间
@@ -63,6 +69,7 @@ public class RolePermission implements Serializable {
     @TableField(value = "deleted")
     private Integer deleted;
 
+    @Serial
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

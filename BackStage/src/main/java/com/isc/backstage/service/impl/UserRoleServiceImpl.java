@@ -15,6 +15,10 @@ import org.springframework.stereotype.Service;
 public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole>
     implements UserRoleService{
 
+    @Override
+    public boolean addUserAndRoleInfo(UserRole newUserRoleInfo) {
+        return this.save(newUserRoleInfo);
+    }
 }
 
 

@@ -31,4 +31,8 @@ public class PatternConstant {
      * 令牌前缀正则表达式
      */
     public final static String BEARER_PATTERN = "^Bearer$";
+
+    public static Boolean judgeTelephoneNumber(String mobile){
+        return TELEPHONE_PATTERN.matcher(mobile).matches();
+    }
 }

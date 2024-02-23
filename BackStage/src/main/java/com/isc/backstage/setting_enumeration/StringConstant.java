@@ -7,6 +7,8 @@ package com.isc.backstage.setting_enumeration;
 
 public class StringConstant {
 
+    public static final String DOT = ".";
+
     /**
      * 空字符串
      */

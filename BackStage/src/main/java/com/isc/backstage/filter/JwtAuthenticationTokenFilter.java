@@ -3,6 +3,7 @@ package com.isc.backstage.filter;
 import com.isc.backstage.Config.CommonSecurityConfiguration;
 import com.isc.backstage.Exception.AuthenticationException;
 import com.isc.backstage.Exception.ServeErrorException;
+import com.isc.backstage.service.UserService;
 import com.isc.backstage.utils.JwtUtil;
 import com.isc.backstage.utils.RequestUtil;
 import com.isc.backstage.utils.ResponseUtil;
@@ -22,6 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -49,23 +51,28 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Resource
     private UserDetailsService userDetailsService;
 
+    @Resource
+    private UserService userService;
+
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
+        AntPathMatcher matcher = new AntPathMatcher();
         // 静态资源放行
         if(Arrays.stream(CommonSecurityConfiguration.STATIC_RESOURCE_WHITE_LIST)
-                .anyMatch(uri -> uri.equals(request.getServletPath()))) {
+                .anyMatch(uri -> matcher.match(uri, request.getServletPath()))) {
             filterChain.doFilter(request, response);
             return;
         }
         // 白名单放行
         if(Arrays.stream(JwtSetting.getWhiteList())
-                .anyMatch(uri -> uri.equals(request.getServletPath()))) {
+                .anyMatch(uri -> matcher.match(uri, request.getServletPath()))) {
+            log.info("this url: {}", request.getServletPath());
             filterChain.doFilter(request, response);
             return;
         }
         try {
-            String accessToken = requestUtil.getTokenFromRequest(request, response);
-            String accessTokenId = jwtUtil.getJwtIdFromToken(accessToken);
+            String accessToken = requestUtil.getTokenFromRequest(request);
+            String accessTokenId = jwtUtil.getJwtIdFromAccessToken(accessToken);
 
             // 判断黑名单
             if(jwtUtil.judgeAccessTokenInBlackList(accessTokenId)){
@@ -85,8 +92,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                             CodeAndMessage.ACCESS_TOKEN_EXPIRED.getCode(),
                             CodeAndMessage.ACCESS_TOKEN_EXPIRED.getZhDescription());
                 }
-                //从数据库加载获取user详细信息，包括权限等
-                UserDetails userDetails = userDetailsService.loadUserByUsername(userFromAccessToken.getName());
+                //从Redis中加载获取user详细信息，包括权限等
+                UserDetails userDetails = userService.getUserDetailsFromRedisWithUserId(useridStr);
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
@@ -97,7 +104,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             }
             filterChain.doFilter(request, response);
         } catch (AuthenticationException | ServeErrorException exception){
-            log.info(exception.toString()+exception.getHttpStatusCode()+ exception.getMessage()+exception.getCode());
+            log.info("request: {}", request.getServletPath());
+            log.info("exception : {}", exception.toString());
             responseUtil.responseError(response, exception.getHttpStatusCode(), exception.getMessage());
         }
     }

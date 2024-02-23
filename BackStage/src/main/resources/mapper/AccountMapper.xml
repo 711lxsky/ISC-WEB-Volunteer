@@ -6,14 +6,14 @@
 
     <resultMap id="BaseResultMap" type="com.isc.backstage.entity.Account">
             <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="user_id" column="user_id" jdbcType="BIGINT"/>
-            <result property="open_code" column="open_code" jdbcType="VARCHAR"/>
+            <result property="userId" column="user_id" jdbcType="BIGINT"/>
+            <result property="openCode" column="open_code" jdbcType="VARCHAR" javaType="String" />
             <result property="category" column="category" jdbcType="TINYINT"/>
             <result property="created" column="created" jdbcType="TIMESTAMP"/>
             <result property="creator" column="creator" jdbcType="VARCHAR"/>
             <result property="edited" column="edited" jdbcType="TIMESTAMP"/>
             <result property="editor" column="editor" jdbcType="VARCHAR"/>
-            <result property="deleted" column="deleted" jdbcType="DOUBLE"/>
+            <result property="deleted" column="deleted" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">

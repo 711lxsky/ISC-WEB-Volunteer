@@ -13,6 +13,11 @@ public class JwtSetting {
 
     @Getter
     private static final String[] WhiteList = {
+            // 测试放行
+            "/test/register",
+            "/test/login",
+            "/test/refresh-access-token",
+
             // 白名单放行
             "/user/login",
             "/user/register",

@@ -42,4 +42,27 @@
         where u.id = #{userid}
 
     </select>
+
+    <select id="getRoleIdForOneRoleName" parameterType="string" resultType="long">
+        select id
+            from role
+        where name = #{roleName}
+#         and deleted = 0
+    </select>
+    <select id="getRoleByUserId" parameterType="long" resultType="com.isc.backstage.entity.Role">
+        select
+            r.id,
+            r.parent_id,
+            r.code,
+            r.name,
+            r.intro,
+            r.created,
+            r.creator,
+            r.edited,
+            r.editor,
+            r.deleted
+            from role as r
+            left join user_role as ur on r.id = ur.role_id
+        where ur.user_id = #{userId}
+    </select>
 </mapper>

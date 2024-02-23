@@ -19,6 +19,8 @@ import java.util.List;
 public interface PermissionMapper extends BaseMapper<Permission> {
 
     List<Permission> getPermissionsByRoleIds(@Param("roleIds") List<Long> roleIds);
+
+    List<Permission> getPermissionsByRoleId(@Param("roleId") Long roleId);
 }
 
 

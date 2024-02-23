@@ -44,4 +44,13 @@ public class WebSetting {
 
    @Getter
     private static final Integer MaxAge = 3600;
+
+   @Getter
+    private static final String Https = "https://";
+
+   @Getter
+    private static final String NullString = "";
+
+   @Getter
+    private static final String ContentMD5 = "Content-MD5";
 }

@@ -6,10 +6,11 @@ import com.isc.backstage.setting_enumeration.JwtSetting;
 import com.isc.backstage.setting_enumeration.PatternConstant;
 import com.isc.backstage.setting_enumeration.StringConstant;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.regex.Pattern;
 
@@ -21,7 +22,7 @@ import java.util.regex.Pattern;
 @Log4j2
 public class RequestUtil {
 
-    public String getTokenFromRequest(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException{
+    public String getTokenFromRequest(HttpServletRequest request) throws AuthenticationException{
         String header = request.getHeader(JwtSetting.getAuthorization_header());
         if(! StringUtils.hasText(header)){
             throw new AuthenticationException(CodeAndMessage.NOT_FOUND_TOKEN.getDescription());
@@ -32,5 +33,9 @@ public class RequestUtil {
             throw new AuthenticationException(CodeAndMessage.CANT_PARSE.getDescription());
         }
         return splits[1];
+    }
+
+    public HttpServletRequest getRequest(){
+        return ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest();
     }
 }

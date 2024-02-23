@@ -29,11 +29,15 @@ public class CommonSecurityConfiguration {
      * 静态资源白名单
      */
     public static final String[] STATIC_RESOURCE_WHITE_LIST = {
+            // swagger
+            "/doc.html", "/webjars/**", "/v3/api-docs/**", "/favicon.*",
+            "/swagger-resources/**", "/v2/api-docs/**", "/swagger-ui/**",
+
             // 静态资源文件
-            "/", "/**/*.js", "/**/*.css", "/**/*.html", "/**/*.svg", "/**/*.pdf", "/**/*.jpg", "/**/*.png", "/**/*.gif",
-            "/**/*.ico",
+            "/", "/**.js", "/**.css", "/**.html", "/**.svg", "/**.pdf", "/**.jpg", "/**.png", "/**.gif",
+            "/**.ico",
             // 排除字体格式后缀
-            "/**/*.ttf", "/**/*.woff", "/**/*.woff2",
-            // 排除Druid、Swagger、H2
-            "/druid/**", "/v2/api-docs", "/webjars/**", "/swagger-resources/**", "/h2-console/**/**" };
+            "/**.ttf", "/**.woff", "/**.woff2",
+            // 排除Druid、H2
+            "/druid/**", "/h2-console/**" };
 }

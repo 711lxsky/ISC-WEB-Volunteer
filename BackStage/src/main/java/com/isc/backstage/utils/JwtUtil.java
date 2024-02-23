@@ -7,6 +7,7 @@ import com.isc.backstage.domain.DTO.TokenDTO;
 import com.isc.backstage.domain.VO.TokenVO;
 import com.isc.backstage.domain.VO.UserVO;
 import com.isc.backstage.setting_enumeration.CodeAndMessage;
+import com.isc.backstage.setting_enumeration.ExceptionConstant;
 import com.isc.backstage.setting_enumeration.JwtSetting;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -47,10 +48,10 @@ public class JwtUtil {
     }
 
     public TokenVO generateTokenVOWithUserInfo(UserVO userVO) throws ServeErrorException, AuthenticationException{
-        String userId = userVO.getId().toString();
+        String userId = String.valueOf(userVO.getId());
         String jsonUserInfo = jacksonUtil.objectToJson(userVO);
         String accessToken = generateAccessTokenByHMACWithData(jsonUserInfo);
-        String refreshToken = generateRefreshTokenByHMAC(getRealUserJwtIdForAccessToken(userId, getJwtIdFromToken(accessToken)));
+        String refreshToken = generateRefreshTokenByHMAC(getRealUserJwtIdForAccessToken(userId, getJwtIdFromAccessToken(accessToken)));
         return new TokenVO(accessToken, refreshToken);
     }
 
@@ -127,19 +128,47 @@ public class JwtUtil {
     }
 
     public  <T>T parseAccessTokenToClass(String token, Class<T> tClass)throws ServeErrorException, AuthenticationException{
-        JWTClaimsSet jwtClaimsSet = verifyToken(token);
+        JWTClaimsSet jwtClaimsSet = verifyAccessToken(token);
         log.info("过期时间： {}",jwtClaimsSet.getExpirationTime());
         log.info("jti: {}", jwtClaimsSet.getJWTID());
         String jsonObject = jwtClaimsSet.getSubject();
         return jacksonUtil.jsonToObject(jsonObject, tClass);
     }
 
-    private JWTClaimsSet verifyToken(String token) throws AuthenticationException, ServeErrorException{
+    private SignedJWT getSignedJWTFromToken(String token) throws ServeErrorException{
         try {
-            SignedJWT parse = SignedJWT.parse(token);
-            if(! parse.verify(generateHMACAccessJWSVerifier())){
-                throw new AuthenticationException(CodeAndMessage.UN_AUTHENTICATION.getDescription());
+            return SignedJWT.parse(token);
+        } catch (ParseException e) {
+            throw new ServeErrorException(CodeAndMessage.CANT_PARSE.getDescription());
+        }
+    }
+
+    private JWTClaimsSet verifyRefreshToken(String refreshToken) throws AuthenticationException, ServeErrorException{
+        SignedJWT parse = getSignedJWTFromToken(refreshToken);
+        try {
+            if(! parse.verify(generateHMACRereshJWSVerifier())){
+                throw new AuthenticationException(ExceptionConstant.RefreshTokenVerifyError.getMessage_EN());
             }
+            return verifyTokenForExpired(parse);
+        } catch (JOSEException e) {
+            throw new ServeErrorException(CodeAndMessage.CANT_SIGN_OR_ENCRYPT.getDescription());
+        }
+    }
+
+    private JWTClaimsSet verifyAccessToken(String accessToken) throws AuthenticationException, ServeErrorException{
+        SignedJWT parse = getSignedJWTFromToken(accessToken);
+        try {
+            if(! parse.verify(generateHMACAccessJWSVerifier())){
+                throw new AuthenticationException(ExceptionConstant.AccessTokenVerifyError.getMessage_EN());
+            }
+            return verifyTokenForExpired(parse);
+        }catch (JOSEException e){
+            throw new ServeErrorException(CodeAndMessage.CANT_SIGN_OR_ENCRYPT.getDescription());
+        }
+    }
+
+    private JWTClaimsSet verifyTokenForExpired(SignedJWT parse) throws AuthenticationException, ServeErrorException{
+        try {
             JWTClaimsSet jwtClaimsSet = parse.getJWTClaimsSet();
             if(Calendar.getInstance().getTime().after(jwtClaimsSet.getExpirationTime())){
                 throw new AuthenticationException(CodeAndMessage.TOKEN_EXPIRED.getDescription());
@@ -147,19 +176,29 @@ public class JwtUtil {
             return jwtClaimsSet;
         } catch (ParseException e) {
             throw new ServeErrorException(CodeAndMessage.CANT_PARSE.getDescription());
-        } catch (JOSEException e) {
-            throw new ServeErrorException(CodeAndMessage.CANT_SIGN_OR_ENCRYPT.getDescription());
         }
     }
 
-    public String getJwtIdFromToken(String token) throws ServeErrorException, AuthenticationException{
-        JWTClaimsSet jwtClaimsSet = verifyToken(token);
-        return jwtClaimsSet.getJWTID();
+
+
+    public String getJwtIdFromAccessToken(String accessToken) throws ServeErrorException, AuthenticationException{
+        JWTClaimsSet jwtClaimsSetForAccessToken = verifyAccessToken(accessToken);
+        return jwtClaimsSetForAccessToken.getJWTID();
     }
 
-    private String getSubjectFromToken(String token)throws ServeErrorException, AuthenticationException{
-        JWTClaimsSet jwtClaimsSet = verifyToken(token);
-        return jwtClaimsSet.getSubject();
+    public String getJwtIdFromRefreshToken(String refreshToken) throws ServeErrorException, AuthenticationException{
+        JWTClaimsSet jwtClaimsSetForRefreshToken = verifyRefreshToken(refreshToken);
+        return jwtClaimsSetForRefreshToken.getJWTID();
+    }
+
+    private String getSubjectFromAccessToken(String accessToken)throws ServeErrorException, AuthenticationException{
+        JWTClaimsSet jwtClaimsSetForAccessToken = verifyAccessToken(accessToken);
+        return jwtClaimsSetForAccessToken.getSubject();
+    }
+
+    private String getSubjectFromRefreshToken(String refreshToken) throws ServeErrorException, AuthenticationException{
+        JWTClaimsSet jwtClaimsSetForRefreshToken = verifyRefreshToken(refreshToken);
+        return jwtClaimsSetForRefreshToken.getSubject();
     }
 
     private String getUseridFormAccessToken(String accessToken) throws AuthenticationException{
@@ -169,11 +208,6 @@ public class JwtUtil {
             throw new AuthenticationException(CodeAndMessage.TOKEN_INVALID.getDescription());
         }
         return userFromAccessToken.getId().toString();
-    }
-
-    private String verifyRefreshToken(String refreshToken){
-        JWTClaimsSet jwtClaimsSet = verifyToken(refreshToken);
-        return jwtClaimsSet.getSubject();
     }
 
     /**
@@ -187,13 +221,13 @@ public class JwtUtil {
         if(StrUtil.isBlank(originAccessToken)){
             throw new AuthenticationException(CodeAndMessage.TOKEN_EXPIRED.getDescription());
         }
-        JWTClaimsSet oldClaimsSet = verifyToken(originAccessToken);
+        JWTClaimsSet oldClaimsSet = verifyAccessToken(originAccessToken);
         JWTClaimsSet newClaimsSet = buildAccessTokenClaimsSetWithJwtId(oldClaimsSet.getSubject(), accessTokenId);
         return generateRefreshAccessToken(newClaimsSet);
     }
 
     public Boolean putAccessTokenIntoBlackList(String accessToken) throws ServeErrorException, AuthenticationException{
-        String jwtId = getJwtIdFromToken(accessToken);
+        String jwtId = getJwtIdFromAccessToken(accessToken);
         redisUtil.set(JwtSetting.getBlackName()+jwtId, accessToken);
         return redisUtil.remove(jwtId);
     }
@@ -330,7 +364,7 @@ public class JwtUtil {
     }
 
     public void saveAccessTokenWithRefreshToken(String refreshToken, String accessToken)throws ServeErrorException, AuthenticationException{
-        String accessTokenId = this.getSubjectFromToken(refreshToken);
+        String accessTokenId = this.getSubjectFromRefreshToken(refreshToken);
         this.saveAccessToken(accessTokenId, accessToken);
     }
 
@@ -353,7 +387,7 @@ public class JwtUtil {
     }
 
     public Boolean removeAccessTokenInRedis(String accessToken){
-        String realJwtId = getRealUserJwtIdForAccessToken(getUseridFormAccessToken(accessToken), getJwtIdFromToken(accessToken));
+        String realJwtId = getRealUserJwtIdForAccessToken(getUseridFormAccessToken(accessToken), getJwtIdFromAccessToken(accessToken));
         return redisUtil.remove(realJwtId);
     }
 }
